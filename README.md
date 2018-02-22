@@ -10,14 +10,14 @@ curl -sS https://getcomposer.org/installer | /usr/bin/php;
 ```
 
 ## Some routes in using inteface:
-URL         Method  REST-link
+URL Method  REST-link
 ```
-/iface_v01/	[POST]	access/create
-/iface_v01/	[POST]	access/restore
-/iface_v01/	[GET]	access/restored
-/iface_v01/	[POST]	access/login
-/iface_v01/	[GET]	recipe/select
-/iface_v01/	[POST]	recipe/update
-/iface_v01/	[POST]	recipe/delete
-/iface_v01/	[POST]	recipe/create
+/   [POST]  author/login
+/   [GET]   author/select
+/   [POST]  author/create
+/   [POST]  author/update
+/   [POST]  recipe/create
+/   [GET]   recipe/select
+/   [POST]  recipe/update
+/   [POST]  recipe/delete
 ```
