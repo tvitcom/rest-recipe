@@ -17,13 +17,22 @@
  * limitations under the License
  */
 
-class User extends Model
+class Author extends Model
 {
     public function __construct() {
         $this->name = 'John Doe';
     }
 
-    public function hello() {
-        echo "Hello, {$this->name}!";
+    public function create() {
+        echo "CREATED: Hello, {$this->name}!";
+    }
+    public function select() {
+        echo "SELECTED: Hello, {$this->name}!";
+    }
+    public function update() {
+        echo "UPDATE: Hello, {$this->name}!";
+    }
+    public function delete() {
+        echo "DELETE: Hello, {$this->name}!";
     }
 }
