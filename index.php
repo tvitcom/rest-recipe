@@ -19,21 +19,39 @@
 require 'vendor/autoload.php';
 
 require_once 'secure/Filtr.php';
-#-require_once 'secure/Auth.php';
-require_once 'models/storage_connector.php';
+//-require_once 'secure/Auth.php';
+require_once 'models/pgsql.php';
 require_once 'models/config.php';
 require_once 'models/Model.php';
 
-require_once 'models/Author.php';
-require_once 'models/Recipe.php';
-#-require_once 'view/user/index.php';
-#-require_once 'view/recipe/index.php';
+//require_once 'models/Author.php';
+//require_once 'models/Recipe.php';
+//-require_once 'view/user/index.php';
+//-require_once 'view/recipe/index.php';
 
-//Flight::route('/@entity(/@action)', function($entity, $action){
-//    $classname = ucfirst($entity);
-//    exit($classname);
-//});
+// Register your class
+//Flight::register('recipe', 'Recipe');
 
-Flight::route('/', array($entity, 'select'));
+//Flight::route('/author/select', array('Author','select'));
+//Flight::route('/author/create', array('Author','create'));
+//Flight::route('/author/update', array('Author','update'));
+//Flight::route('/author/delete', array('Author','delete'));
+
+Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity, $method, $id){
+    $classname = ucfirst($entity);
+    
+    // load only entity class;
+    $fpath_model = 'models/'.$classname.'.php';
+    if (file_exists($fpath_model)) {
+        require $fpath_model;
+        echo "LOADED:".$entity . '->'.$method.'('.$id.')';
+    } else { 
+        Flight::halt(404, 'Error 404. Page not found!');
+    }
+});
+
+Flight::route('GET /*', function(){
+    echo 'I received a GET / -> webroot request.';
+});
 
 Flight::start();
