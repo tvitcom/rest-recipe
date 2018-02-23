@@ -17,15 +17,5 @@
  * limitations under the License
  */
 
-$config = [
-    'app'=>[
-        'name'=>'REST-RECIPE',
-    ],
-    'storage'=> [
-        'type'=>'postgre',
-        'dsn'=>'',
-    ],
-];
-
 Flight::set('flight.views.path','views');
 Flight::set('flight.views.extension','.php');
