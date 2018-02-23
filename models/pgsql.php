@@ -41,11 +41,9 @@ class Pgsql
     public static function getInstance()
     {
         if (!self::$instance) {
-            self::$instance = new PDO(
-                'pgsql:host='.self::param['host']
-                .';port='. self::$param['port']
-                .';dbname='.self::$param['name']
-                .';user=bruce;password='.self::param['pass']
+            self::$instance = new PDO('pgsql:host='.self::param['host'].';port='. self::$param['port'].';dbname='.self::$param['name'],
+                self::$param['user'],
+                self::param['pass']
             );
             self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }

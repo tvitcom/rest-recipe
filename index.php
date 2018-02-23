@@ -19,10 +19,9 @@
 require 'vendor/autoload.php';
 
 require_once 'secure/Filtr.php';
-//-require_once 'secure/Auth.php';
-require_once 'models/pgsql.php';
 require_once 'models/config.php';
-require_once 'models/Model.php';
+require_once 'models/pgsql.php';
+require_once 'models/model.php';
 
 //require_once 'models/Author.php';
 //require_once 'models/Recipe.php';
@@ -44,14 +43,22 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity,
     $fpath_model = 'models/'.$classname.'.php';
     if (file_exists($fpath_model)) {
         require $fpath_model;
-        echo "LOADED:".$entity . '->'.$method.'('.$id.')';
+        //echo "LOADED:".$entity . '->'.$method.'('.$id.')';
+        //echo "LOADED:".$entity . '->'.$method.'('.$id.')';
+        Flight::json([
+            'id' => $id,
+            'method'=> $method,
+            'entity'=> $entity,
+        ]);
+
+
     } else { 
         Flight::halt(404, 'Error 404. Page not found!');
     }
 });
 
-Flight::route('GET /*', function(){
-    echo 'I received a GET / -> webroot request.';
+Flight::route('/*', function(){
+    Flight::render('list.php', array('name' => 'Bob'));
 });
 
 Flight::start();
