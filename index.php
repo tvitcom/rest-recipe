@@ -24,16 +24,16 @@ require_once 'models/storage_connector.php';
 require_once 'models/config.php';
 require_once 'models/Model.php';
 
-require_once 'models/User.php';
+require_once 'models/Author.php';
 require_once 'models/Recipe.php';
 #-require_once 'view/user/index.php';
 #-require_once 'view/recipe/index.php';
 
+//Flight::route('/@entity(/@action)', function($entity, $action){
+//    $classname = ucfirst($entity);
+//    exit($classname);
+//});
 
-
-
-$greeting = new User();
-
-Flight::route('/', array($greeting, 'hello'));
+Flight::route('/', array($entity, 'select'));
 
 Flight::start();
