@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-class Pgsql
+class Mysql
 {
     private static $instance = NULL;
     
@@ -26,7 +26,7 @@ class Pgsql
     {
         self::$param = [
             'host' => '127.0.0.1',
-            'port' => '5432',
+            'port' => '3306',
             'name' => 'recipe',
             'user' => 'recipe',
             'pass' => 'pass_to_recipe',
@@ -41,7 +41,7 @@ class Pgsql
     public static function getInstance()
     {
         if (!self::$instance) {
-            self::$instance = new PDO('pgsql:host='.self::param['host'].';port='. self::$param['port'].';dbname='.self::$param['name'],
+            self::$instance = new PDO('mysql:host='.self::param['host'].';port='. self::$param['port'].';dbname='.self::$param['name'],
                 self::$param['user'],
                 self::param['pass']
             );

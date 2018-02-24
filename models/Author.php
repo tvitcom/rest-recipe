@@ -2,7 +2,7 @@
 
 /* 
  * REST-RECIPE
- * Copyright 2018 //github.com/tvitcom. All rights reserved.
+ * Copyright 2018 github.com/tvitcom. All rights reserved.
 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ class Author extends Model
 
     public function login($email)
     {
-        $query = MySQL::getInstance()->prepare('
+        $query = Pgsql::getInstance()->prepare('
             SELECT id, fio, whois, email, passhash, sex, photo, rights, t_passhash
             FROM author
             WHERE email=:email AND is_active=1 limit 1
@@ -38,7 +38,7 @@ class Author extends Model
 
     public function count()
     {
-        $query = MySQL::getInstance()->query("
+        $query = Pgsql::getInstance()->query("
             SELECT count(*) as quantity
             FROM  author
             WHERE is_active = 1"
@@ -53,20 +53,16 @@ class Author extends Model
         $query = "
             UPDATE author
             SET (
-                fio=:fio,
-                whois=:whois,
+                name=:name,
                 email=:email,
-                passhash=:passhash,
+                pass_hash=:passhash,
                 credit_card=:credit_card,
                 card_expire=:card_expire,
-                sex=:sex,
-                photo=:photo,
-                rights=:rights,
                 t_passhash=:t_passhash,
                 is_active=:is_active)
             WHERE id = :id
             ";
-        $query = MySQL::getInstance()->prepare($query);
+        $query = Pgsql::getInstance()->prepare($query);
         $query->bindValue(':id', $data['id'], PDO::PARAM_INT);
         $query->bindValue(':fio', $data['fio'], PDO::PARAM_STR);
         $query->bindValue(':whois', $data['whois'], PDO::PARAM_STR);
@@ -84,7 +80,7 @@ class Author extends Model
 
     public function delete($author_id = 0)
     {
-        $query = MySQL::getInstance()->prepare("DELETE FROM author WHERE id = :id");
+        $query = Pgsql::getInstance()->prepare("DELETE FROM author WHERE id = :id");
         $query->bindValue(':id', $author_id, PDO::PARAM_INT);
         $result = $query->execute();
         return $result;
@@ -92,7 +88,7 @@ class Author extends Model
 
     public function create($data)
     {
-        $query = MySQL::getInstance()->prepare("
+        $query = Pgsql::getInstance()->prepare("
             INSERT INTO author
             VALUES (:id,:fio,:whois,:email,:passhash,:credit_card,:card_expire,
                     :sex,:photo,:rights,:t_passhash,:is_active)
@@ -124,7 +120,7 @@ class Author extends Model
     public function select($email = '')
     {
         if (!empty($email)) {
-            $author = MySQL::getInstance()->prepare('
+            $author = Pgsql::getInstance()->prepare('
                 SELECT id, fio, whois, email, passhash, credit_card, card_expire,
                              sex, photo, rights, t_passhash, is_active
                 FROM author
@@ -140,7 +136,7 @@ class Author extends Model
 
     public function activation($email = '')
     {
-        $author = MySQL::getInstance()->prepare('
+        $author = Pgsql::getInstance()->prepare('
             UPDATE author
             SET is_active = 1
             WHERE email=:email
