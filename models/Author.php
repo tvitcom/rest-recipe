@@ -45,14 +45,14 @@ class Author extends Model
         }
     }
 
-    public static function login($email, $secret)
+    public static function login($data)
     {
         $query = Mysql::getInstance()->prepare('
-            SELECT id, email, pass_hash, api_key, ts_cretate, ts_update, recovery_key
+            SELECT id, email, pass_hash, api_key, ts_create, ts_update, recover_key
             FROM author
             WHERE email=:email limit :limit
         ');
-        $query->BindValue(':email', $email, PDO::PARAM_STR);
+        $query->BindValue(':email', $data['email'], PDO::PARAM_STR);
         $query->BindValue(':limit', 1, PDO::PARAM_INT);
         $query->execute();
         $author = $query->fetch(PDO::FETCH_ASSOC);
