@@ -21,13 +21,16 @@
  * Here set any settings and variables for web application.
  */
 
-
 defined('DS') or define('DS', '/');// Define directory separator sign.
 
 if ($_SERVER['REMOTE_ADDR']==='127.0.0.1') {
+    defined('WEB_DEBUG') or define('WEB_DEBUG', 'false');// Define directory separator sign.
     Flight::set('flight.log_errors', true);
+    Flight::set('flight.handle_errors', true);
 } else {
+    defined('WEB_DEBUG') or define('WEB_DEBUG', 'false');// Define directory separator sign.
     Flight::set('flight.log_errors', false);
+    Flight::set('flight.handle_errors', false);
 }
 Flight::set('limit',5);
 Flight::set('flight.views.path','views');

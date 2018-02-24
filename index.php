@@ -35,9 +35,9 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity,
         require $fpath_model;
         
         if (method_exists($classname,$method)) {
-            if ($_SERVER['REQUEST_METHOD']==='POST')
+            if ($_SERVER['REQUEST_METHOD']==='POST' && Author::is_user($_POST['email'],$_POST['apikey']))
                 Flight::set('result', $classname::{$method}($_POST));
-            else
+            elseif ($_SERVER['REQUEST_METHOD']==='GET' && Author::is_user($_GET['email'],$_GET['apikey']))
                 Flight::set('result', $classname::{$method}($_GET));
         } else {
             Flight::set('error','action not found');
