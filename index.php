@@ -53,15 +53,16 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity,
          */
         Flight::json([
             'context'=> $_SERVER['REQUEST_URI'],
-            'result'=> (Flight::get('result')=='') 
-                ? [
-                    'params'=> $_POST,
-                    'request-get'=> $_GET,
-                    'id' => $id,
-                    'method'=> $method,
-                    'entity'=> $entity,
-                    ]
-                : Flight::get('result'),
+            'result'=> Flight::get('result'),
+//(Flight::get('result')=='') 
+//                ? [
+//                    'params'=> $_POST,
+//                    'request-get'=> $_GET,
+//                    'id' => $id,
+//                    'method'=> $method,
+//                    'entity'=> $entity,
+//                    ]
+//                : 
                 'error'=> Flight::get('error'),
         ]);
     } else { 

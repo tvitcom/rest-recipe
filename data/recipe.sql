@@ -9,6 +9,7 @@ CREATE TABLE author (
   ts_update integer,
   recover_key varchar(127) DEFAULT NULL
 );
+ALTER TABLE author ADD UNIQUE( email);
 ALTER SEQUENCE seq_author_id_integer OWNED BY author.id;
 CREATE SEQUENCE seq_recipe_id_integer;
 CREATE TABLE recipe (

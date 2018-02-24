@@ -16,6 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
+
+/*
+ * Here set any settings and variables for web application.
+ */
+
+
 defined('DS') or define('DS', '/');// Define directory separator sign.
 
 if ($_SERVER['REMOTE_ADDR']==='127.0.0.1') {

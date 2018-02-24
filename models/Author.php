@@ -30,7 +30,7 @@ class Author extends Model
     public static function is_user($email, $secret)
     {
         $query = Mysql::getInstance()->prepare('
-            SELECT id, email, pass_hash, api_key, ts_cretate, ts_update, recovery_key
+            SELECT id, email, pass_hash, api_key, ts_cretate, ts_update, recover_key
             FROM author
             WHERE email=:email limit :limit
         ');
@@ -53,10 +53,10 @@ class Author extends Model
             WHERE email=:email limit :limit
         ');
         $query->BindValue(':email', $data['email'], PDO::PARAM_STR);
+        $query->BindValue(':pass_hash', hash('sha256',$data['secret']), PDO::PARAM_STR);
         $query->BindValue(':limit', 1, PDO::PARAM_INT);
         $query->execute();
-        $author = $query->fetch(PDO::FETCH_ASSOC);
-        return $author;
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
 
 //    public static function count()
@@ -111,27 +111,27 @@ class Author extends Model
     public static function create($data)
     {
         $query = Mysql::getInstance()->prepare("
-            INSERT INTO author
+            INSERT INTO author (name, email, pass_hash, api_key, ts_create, ts_update, recover_key)
             VALUES (:name, :email, :pass_hash, :api_key, :ts_create, :ts_update, :recover_key)
         ");
-        //-$query->bindValue(':id', '', PDO::PARAM_STR);
+        //$query->bindValue(':id', '', PDO::PARAM_STR);
         $query->bindValue(':name', $data['name'], PDO::PARAM_STR);
         $query->bindValue(':email', $data['email'], PDO::PARAM_STR);
         $query->bindValue(':pass_hash', Auth::hash($data['secret']), PDO::PARAM_STR);
         $query->bindValue(':api_key', hash('sha256', $data['secret']), PDO::PARAM_STR);
-        $query->bindValue(':ts_create', time(), PDO::PARAM_STR);
-        $query->bindValue(':tc_update', time(), PDO::PARAM_BOOL);
+        $query->bindValue(':ts_create', time(), PDO::PARAM_INT);
+        $query->bindValue(':ts_update', time(), PDO::PARAM_INT);
         $query->bindValue(':recover_key', '', PDO::PARAM_STR);
 
         try
         {
             $query->execute();
             //return $query->lastInsertId('seq_author_id_integer');
-            return $query->lastInsertId();
+            return Mysql::getInstance()->lastInsertId();
         }
         catch (PDOException $e)
         {
-            Flight::set('error','{"notice":"' . addslashes($e->getMessage()) . '"}');
+            Flight::set('error','{"message":"' . addslashes($e->getMessage()) . '"}');
             exit(Flight::get('error'));
         };
     }
