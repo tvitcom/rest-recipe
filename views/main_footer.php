@@ -19,6 +19,6 @@
 ?>
 <div id="footer-container">
     <footer class="wrapper">
-        <h3>tvitcom/rest-recipe @ All right reserved. <?=date('Y')?></h3>
+        <h3>tvitcom@github.com @ All right reserved. <?=date('Y')?></h3>
     </footer>
 </div>

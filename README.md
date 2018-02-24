@@ -37,7 +37,7 @@ URL:       | Method:| REST-link:
 /iface_v01/   [POST]  author/login
 /iface_v01/   [POST]  author/create
 /iface_v01/   [GET]   recipe/selectLast
-/iface_v01/   [POST]  recipe/createOwn
+/iface_v01/   [POST]  recipe/create
 /iface_v01/   [POST]  recipe/updateOwn
 /iface_v01/   [POST]  recipe/deleteOwn
 ----------------------------------------
