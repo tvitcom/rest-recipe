@@ -56,7 +56,7 @@
 				<section>
 					<h2>Sign here:</h2>
 					<p>
-                                        <form method="POST" accept-charset="utf-8" action="/iface_v01/author/login" target="_self">
+                                        <form method="POST" accept-charset="utf-8" action="/iface_v01/author/create" target="_self">
                                           <fieldset>
                                             <legend>Personal information:</legend>
                                                 You name:<br>
