@@ -34,6 +34,12 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity,
     if (file_exists($fpath_model)) {
         require $fpath_model;
         
+        if (method_exists($classname,$method)) {
+            
+        } else {
+            Flight::set('error','action not found');
+        }
+        
         /*
          * Format returned json:
          * {
@@ -43,15 +49,17 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity,
          * }
          */
         Flight::json([
-            'context'=>$_SERVER['REQUEST_URI'],
-            'result'=> [
-                'params'=>$_POST,
-                'request-get'=>$_GET,
-                'id' => $id,
-                'method'=> $method,
-                'entity'=> $entity,
-                ],
-            'error'=>[],
+            'context'=> $_SERVER['REQUEST_URI'],
+            'result'=> (Flight::get('result')=='') 
+                ? [
+                    'params'=> $_POST,
+                    'request-get'=> $_GET,
+                    'id' => $id,
+                    'method'=> $method,
+                    'entity'=> $entity,
+                    ]
+                : Flight::get('result'),
+                'error'=> Flight::get('error'),
         ]);
     } else { 
         Flight::halt(404, 'Error 404. Page not found!');
@@ -80,7 +88,9 @@ Flight::route('/', function(){
 });
 
 Flight::route('/*', function(){
-    Flight::halt(404, 'Error 404. Page not found!');
+    //Flight::halt(404, 'Error 404. Page not found!');
+    //test only: 
+    Flight::halt(404, Flight::get('result'));
 });
 
 Flight::start();
