@@ -2,7 +2,7 @@
 
 /* 
  * REST-RECIPE
- * Copyright 2018 //github.com/tvitcom. All rights reserved.
+ * Copyright 2018 github.com/tvitcom. All rights reserved.
 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@
                                                 Email:<br>
                                             <input type="email" name="email" autocomplete="on" pattern="^[0-9a-zA-Z@-\.]+$"><br>
                                                 Secretkey (password):<br>
-                                                <input type="text" name="secret" autocomplete="off"><br>
+                                                <input type="text" name="secret" autocomplete="off" pattern="^.{6,127}$"><br>
                                               <br><br>
                                               <input type="submit" value="Submit">
                                           </fieldset>

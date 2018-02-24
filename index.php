@@ -2,7 +2,7 @@
 
 /* 
  * REST-RECIPE
- * Copyright 2018 //github.com/tvitcom. All rights reserved.
+ * Copyright 2018 github.com/tvitcom. All rights reserved.
 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,11 @@ require 'vendor/autoload.php';
 
 require_once 'secure/Filtr.php';
 require_once 'models/config.php';
-require_once 'models/pgsql.php';
+//require_once 'models/pgsql.php';
+require_once 'models/mysql.php';
 require_once 'models/model.php';
 
-//require_once 'models/Author.php';
-//require_once 'models/Recipe.php';
-//-require_once 'view/user/index.php';
-//-require_once 'view/recipe/index.php';
-
+//Work with api.
 Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity, $method, $id){
     $classname = ucfirst($entity);
     
@@ -35,33 +32,46 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity,
     $fpath_model = 'models/'.$classname.'.php';
     if (file_exists($fpath_model)) {
         require $fpath_model;
-        //echo "LOADED:".$entity . '->'.$method.'('.$id.')';
-        //echo "LOADED:".$entity . '->'.$method.'('.$id.')';
+        
+        /*
+         * Format returned json:
+         * {
+         * context:{},
+         * result:{},
+         * error:{}
+         * }
+         */
         Flight::json([
+            'context'=>$_SERVER['REQUEST_URI'],
+            'request-post'=>$_POST,
+            'request-get'=>$_GET,
             'id' => $id,
             'method'=> $method,
             'entity'=> $entity,
         ]);
-
-
     } else { 
         Flight::halt(404, 'Error 404. Page not found!');
     }
 });
-
+// Work with frontends pages and forms.
 Flight::route('GET /page(/@name)', function($name){
     // load only stored files;
     $pagename = Flight::get('flight.views.path').DS.$name.Flight::get('flight.views.extension');
     //exit($pagename);
     if (file_exists($pagename)) {
-        Flight::render($name, array('title' => ucfirst($name)));
+        Flight::render($name, [
+            'title' => ucfirst($name),
+            'content'=>'',
+            'date'=>'',
+            'name'=>'',
+            ]);
     } else { 
         Flight::halt(404, 'Error 404. Page not found!');
     }
 });
 
 Flight::route('/*', function(){
-    Flight::render('list.php', array('name' => 'Bob'));
+    Flight::halt(404, 'Error 404. Page not found!');
 });
 
 Flight::start();
