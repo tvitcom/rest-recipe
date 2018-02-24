@@ -23,10 +23,10 @@ class Author extends Model
         $this->name = 'John Doe';
     }
 
-    public function login($email)
+    public static function login($email, $secret)
     {
         $query = Pgsql::getInstance()->prepare('
-            SELECT id, fio, whois, email, passhash, sex, photo, rights, t_passhash
+            SELECT id, email, pass_hash, api_key, ts_cretate, ts_update, recovery_key
             FROM author
             WHERE email=:email AND is_active=1 limit 1
         ');
@@ -36,17 +36,17 @@ class Author extends Model
         return $author;
     }
 
-    public function count()
-    {
-        $query = Pgsql::getInstance()->query("
-            SELECT count(*) as quantity
-            FROM  author
-            WHERE is_active = 1"
-        );
-        return $query->fetch(PDO::FETCH_ASSOC);
-    }
+//    public static function count()
+//    {
+//        $query = Pgsql::getInstance()->query("
+//            SELECT count(*) as quantity
+//            FROM  author
+//            WHERE is_active = 1"
+//        );
+//        return $query->fetch(PDO::FETCH_ASSOC);
+//    }
 
-    public function update($data = array())
+    public static function update($data = array())
     {
         if (!count($data))
             return;
@@ -78,7 +78,7 @@ class Author extends Model
         $query->execute();
     }
 
-    public function delete($author_id = 0)
+    public static function delete($author_id = 0)
     {
         $query = Pgsql::getInstance()->prepare("DELETE FROM author WHERE id = :id");
         $query->bindValue(':id', $author_id, PDO::PARAM_INT);
@@ -86,7 +86,7 @@ class Author extends Model
         return $result;
     }
 
-    public function create($data)
+    public static function create($data)
     {
         $query = Pgsql::getInstance()->prepare("
             INSERT INTO author
@@ -117,7 +117,7 @@ class Author extends Model
         };
     }
 
-    public function select($email = '')
+    public static function select($email = '')
     {
         if (!empty($email)) {
             $author = Pgsql::getInstance()->prepare('
@@ -132,20 +132,5 @@ class Author extends Model
             return $author->fetch(PDO::FETCH_ASSOC);
         }
         return;
-    }
-
-    public function activation($email = '')
-    {
-        $author = Pgsql::getInstance()->prepare('
-            UPDATE author
-            SET is_active = 1
-            WHERE email=:email
-        ');
-        $author->bindValue(':email', $email, PDO::PARAM_STR);
-        if ($author->execute()) {
-            return true;//$author->fetch(PDO::FETCH_ASSOC);
-        } else {
-            return;
-        }
     }
 }
