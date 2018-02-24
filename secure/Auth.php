@@ -29,10 +29,10 @@ class Auth
 
     public static function setLogin($user)
     {
-        if (isset($user)) {
+        if (isset($user['id']) && $user['id'] != '') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_email'] = $user['email'];
-            $_SESSION['rights'] = $user['rights'];
+            $_SESSION['api_key'] = $user['api_key'];
         }
         return self::isLogged();
     }
