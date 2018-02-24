@@ -18,13 +18,14 @@
  */
 require 'vendor/autoload.php';
 
+require_once 'secure/Auth.php';
 require_once 'secure/Filtr.php';
 require_once 'models/config.php';
 //require_once 'models/pgsql.php';
 require_once 'models/mysql.php';
 require_once 'models/model.php';
 
-//Work with api.
+// Work with REST Api:
 Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity, $method, $id){
     $classname = ucfirst($entity);
     
