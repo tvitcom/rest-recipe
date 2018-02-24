@@ -35,7 +35,10 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity,
         require $fpath_model;
         
         if (method_exists($classname,$method)) {
-            
+            if ($_SERVER['REQUEST_METHOD']==='POST')
+                Flight::set('result', $classname::{$method}($_POST));
+            else
+                Flight::set('result', $classname::{$method}($_GET));
         } else {
             Flight::set('error','action not found');
         }
@@ -88,9 +91,9 @@ Flight::route('/', function(){
 });
 
 Flight::route('/*', function(){
-    //Flight::halt(404, 'Error 404. Page not found!');
+    Flight::halt(404, 'Error 404. Page not found!');
     //test only: 
-    Flight::halt(404, Flight::get('result'));
+    //Flight::halt(200, print_r($_REQUEST));
 });
 
 Flight::start();

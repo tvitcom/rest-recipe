@@ -9,6 +9,8 @@ If you’re using Composer, you can run the following command:
 curl -sS https://getcomposer.org/installer | /usr/bin/php;
 /usr/bin/php composer.phar update
 ```
+and you will create local database:"recipe" and approciate user:"recipe" with passwod:"pass_to_recipe"
+and then load recipe.sql to database.
 
 ## Routes using inteface:
 
