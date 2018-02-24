@@ -10,7 +10,7 @@ curl -sS https://getcomposer.org/installer | /usr/bin/php;
 /usr/bin/php composer.phar update
 ```
 
-## Some routes in using inteface:
+## Routes using inteface:
 
 ```
 URL: | Method: | REST-link:
@@ -24,4 +24,12 @@ URL: | Method: | REST-link:
 /   [POST]  recipe/update
 /   [POST]  recipe/delete
 ---------------------------
+
+ //REST Api will return json-string like:
+ 
+    {
+        "context":"",
+        "result":{},
+        "error":[]
+    }
 ```

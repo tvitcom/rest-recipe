@@ -27,7 +27,7 @@ class Auth
             return;
     }
 
-    public static function setLogin($user=array())
+    public static function setLogin($user)
     {
         if (isset($user)) {
             $_SESSION['user_id'] = $user['id'];
@@ -46,9 +46,10 @@ class Auth
     }
 
     public static function hash($pass = '', $tstamp = '') {
-        if (($pass == true) AND ( $tstamp == true)){
-            $half_hash = '$2y$' . base64_encode(
-                hash_hmac('sha512', $pass, Config::$item['salt'] . $tstamp, true)
+        $tstamp = ($tstamp!=='')?$tstamp:time(); 
+        if (($pass == true)){
+            $half_hash = base64_encode(
+                hash_hmac('sha256', $pass, $tstamp, true)
             );
             return substr($half_hash, 0, -2);
         } else
