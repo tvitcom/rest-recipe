@@ -20,30 +20,21 @@ class Mysql
 {
     private static $instance = NULL;
     
-    private static $param = [];
-
     private function __construct()
     {
-        self::$param = [
-            'host' => '127.0.0.1',
-            'port' => '3306',
-            'name' => 'recipe',
-            'user' => 'recipe',
-            'pass' => 'pass_to_recipe',
-            ];
+        return;
     }
 
     private function __clone()
     {
-
+        return;
     }
 
     public static function getInstance()
     {
         if (!self::$instance) {
-            self::$instance = new PDO('mysql:host='.self::param['host'].';port='. self::$param['port'].';dbname='.self::$param['name'],
-                self::$param['user'],
-                self::param['pass']
+            self::$instance = new PDO('mysql:host=localhost;port=3306;dbname=recipe',
+                'recipe','pass_to_recipe'
             );
             self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }

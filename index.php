@@ -28,7 +28,7 @@ require_once 'models/model.php';
 Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity, $method, $id){
     $classname = ucfirst($entity);
     
-    // load only entity class;
+    // load only entity classe;
     $fpath_model = 'models/'.$classname.'.php';
     if (file_exists($fpath_model)) {
         require $fpath_model;
@@ -36,23 +36,27 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity,
         /*
          * Format returned json:
          * {
-         * context:{},
+         * context:string,
          * result:{},
-         * error:{}
+         * error:[]
          * }
          */
         Flight::json([
             'context'=>$_SERVER['REQUEST_URI'],
-            'request-post'=>$_POST,
-            'request-get'=>$_GET,
-            'id' => $id,
-            'method'=> $method,
-            'entity'=> $entity,
+            'result'=> [
+                'params'=>$_POST,
+                'request-get'=>$_GET,
+                'id' => $id,
+                'method'=> $method,
+                'entity'=> $entity,
+                ],
+            'error'=>[],
         ]);
     } else { 
         Flight::halt(404, 'Error 404. Page not found!');
     }
 });
+
 // Work with frontends pages and forms.
 Flight::route('GET /page(/@name)', function($name){
     // load only stored files;
@@ -68,6 +72,10 @@ Flight::route('GET /page(/@name)', function($name){
     } else { 
         Flight::halt(404, 'Error 404. Page not found!');
     }
+});
+
+Flight::route('/', function(){
+    Flight::redirect('/page/list');
 });
 
 Flight::route('/*', function(){
