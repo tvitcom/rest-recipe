@@ -27,7 +27,7 @@ class Author extends Model
      * Test is users email assign to existent user and is valid api_key or not
      * @return user id or false;
      */
-    public static function is_user($apikey)
+    public static function is_user($apikey = '')
     {
         $query = Mysql::getInstance()->prepare('
             SELECT id, email, pass_hash, api_key, ts_create, ts_update, recover_key
@@ -45,7 +45,21 @@ class Author extends Model
         }
     }
     
-    public static function create($data)
+    public static function select($id = 0)
+    {
+        // If $identity is email array or not (another one be int id).
+        $author = Mysql::getInstance()->prepare('
+            SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
+            FROM author
+            WHERE id = :id
+            LIMIT 1
+        ');
+        $author->bindValue(':id', $identity, PDO::PARAM_INT);
+        $author->execute();
+        return $author->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public static function create($data = [])
     {
         $query = Mysql::getInstance()->prepare("
             INSERT INTO author (name, email, pass_hash, api_key, ts_create, ts_update, recover_key)
