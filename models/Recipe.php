@@ -22,6 +22,7 @@
 ----------------------------------------
 /iface_v01/   [POST]  author/login
 /iface_v01/   [POST]  author/create
+ * * * * * * * * * *  
 /iface_v01/   [GET]   recipe/selectLast
 /iface_v01/   [POST]  recipe/createOwn
 /iface_v01/   [POST]  recipe/updateOwn
@@ -55,7 +56,7 @@ class Recipe extends Model {
         }
     }
 
-    public static function update($data)
+    public static function updateOwn($data)
     {
         if (!count($data))
             return false;
@@ -82,15 +83,16 @@ class Recipe extends Model {
         $query->execute();
     }
 
-//    public static function delete($author_id = 0)
-//    {
-//        $query = Mysql::getInstance()->prepare("DELETE FROM author WHERE id = :id");
-//        $query->bindValue(':id', $author_id, PDO::PARAM_INT);
-//        $result = $query->execute();
-//        return $result;
-//    }
+    public static function deleteOwn($id = 0)
+    {
+        $query = Mysql::getInstance()->prepare("DELETE FROM recipe WHERE id = :id and author_id = :author_id");
+        $query->bindValue(':id', $id, PDO::PARAM_INT);
+        $query->bindValue(':author_id', $author_id, PDO::PARAM_INT);
+        $result = $query->execute();
+        return $result;
+    }
 
-    public static function create($data)
+    public static function createOwn($data)
     {
         $query = Mysql::getInstance()->prepare("
             INSERT INTO author (name, email, pass_hash, api_key, ts_create, ts_update, recover_key)
@@ -119,30 +121,16 @@ class Recipe extends Model {
         };
     }
 
-    public static function select($identity = '')
+    public static function selectLast($count = 5)
     {
-        // If $identity is email array or not (another one be int id).
-        if (is_array($identity)) {
-            $author = Mysql::getInstance()->prepare('
-                SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
-                FROM author
-                WHERE email = :email
-                LIMIT 1
-            ');
-            $author->bindValue(':email', $identity['email'], PDO::PARAM_STR);
-            $author->execute();
-            return $author->fetch(PDO::FETCH_ASSOC);
-        } else {
-            $author = Mysql::getInstance()->prepare('
-                SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
-                FROM author
-                WHERE id = :id
-                LIMIT 1
-            ');
-            $author->bindValue(':id', $identity, PDO::PARAM_INT);
-            $author->execute();
-            return $author->fetch(PDO::FETCH_ASSOC);
-        }
-        return;
+        $author = Mysql::getInstance()->prepare('
+            SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
+            FROM author
+            WHERE id = :id
+            LIMIT 1
+        ');
+        $author->bindValue(':id', $identity, PDO::PARAM_INT);
+        $author->execute();
+        return $author->fetch(PDO::FETCH_ASSOC);
     }
 }
