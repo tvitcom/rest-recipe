@@ -16,12 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-defined('DS') or define('DS', '/');// Define directory separator sign.
-
-if ($_SERVER['REMOTE_ADDR']==='127.0.0.1') {
-    Flight::set('flight.log_errors', true);
-} else {
-    Flight::set('flight.log_errors', false);
-}
-Flight::set('flight.views.path','views');
-Flight::set('flight.views.extension','.php');
+?>
+	<div id="header-container">
+		<header class="wrapper clearfix">
+			<h1 id="title">Rest-Recipe</h1>
+			<nav>
+				<ul>
+					<li><a href="/page/list">List</a></li>
+					<li><a href="/page/new">Add Recipe</a></li>
+					<li><a href="/page/login">Login</a></li>
+				</ul>
+			</nav>
+		</header>
+	</div>

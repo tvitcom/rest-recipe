@@ -16,12 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-defined('DS') or define('DS', '/');// Define directory separator sign.
-
-if ($_SERVER['REMOTE_ADDR']==='127.0.0.1') {
-    Flight::set('flight.log_errors', true);
-} else {
-    Flight::set('flight.log_errors', false);
-}
-Flight::set('flight.views.path','views');
-Flight::set('flight.views.extension','.php');
+?>
+<div id="footer-container">
+    <footer class="wrapper">
+        <h3>tvitcom/rest-recipe @ All right reserved. <?=date('Y')?></h3>
+    </footer>
+</div>

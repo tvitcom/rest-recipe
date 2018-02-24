@@ -25,25 +25,14 @@
 </head>
 <body>
 
-	<div id="header-container">
-		<header class="wrapper clearfix">
-			<h1 id="title">Rest-Recipe</h1>
-			<nav>
-				<ul>
-					<li><a href="/recipe/select">List</a></li>
-					<li><a href="/recipe/create">Add Recipe</a></li>
-					<li><a href="/person/login">Login</a></li>
-				</ul>
-			</nav>
-		</header>
-	</div>
+<?php require 'main_header.php'?>
 	<div id="main-container">
 		<div id="main" class="wrapper clearfix">
 			
 			<article>
 				<header>
-					<h1>article header h1</h1>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec.</p>
+					<h1><?=$title?> recipes</h1>
+					<p>You can see last five recipes.</p>
 				</header>
 				<section>
 					<h2>article section h2</h2>
@@ -66,12 +55,8 @@
 			
 		</div> <!-- #main -->
 	</div> <!-- #main-container -->
-
-	<div id="footer-container">
-		<footer class="wrapper">
-			<h3>tvitcom/rest-recipe @ All right reserved. <?=date('Y')?></h3>
-		</footer>
-	</div>
+<?php require 'main_footer.php'?>
+	
 
 </body>
 </html>

@@ -28,14 +28,6 @@ require_once 'models/model.php';
 //-require_once 'view/user/index.php';
 //-require_once 'view/recipe/index.php';
 
-// Register your class
-//Flight::register('recipe', 'Recipe');
-
-//Flight::route('/author/select', array('Author','select'));
-//Flight::route('/author/create', array('Author','create'));
-//Flight::route('/author/update', array('Author','update'));
-//Flight::route('/author/delete', array('Author','delete'));
-
 Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity, $method, $id){
     $classname = ucfirst($entity);
     
@@ -52,6 +44,17 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity,
         ]);
 
 
+    } else { 
+        Flight::halt(404, 'Error 404. Page not found!');
+    }
+});
+
+Flight::route('GET /page(/@name)', function($name){
+    // load only stored files;
+    $pagename = Flight::get('flight.views.path').DS.$name.Flight::get('flight.views.extension');
+    //exit($pagename);
+    if (file_exists($pagename)) {
+        Flight::render($name, array('title' => ucfirst($name)));
     } else { 
         Flight::halt(404, 'Error 404. Page not found!');
     }

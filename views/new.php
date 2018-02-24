@@ -43,27 +43,31 @@
 	<script src="/static/js/libs/modernizr-2.0.6.min.js"></script>
 </head>
 <body>
-
 <?php require 'main_header.php'?>
 	<div id="main-container">
 		<div id="main" class="wrapper clearfix">
 			
 			<article>
 				<header>
-					<h1><?=$title?></h1>
-                                        <p>If you wish be register click <a href="/page/register" target="_self">register</a>.</p>
+					<h1><?=$title?> recipe</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec.</p>
 				</header>
 				<section>
-					<h2>Sign here:</h2>
+					<h2>Fill here:</h2>
 					<p>
-                                        <form method="POST" accept-charset="utf-8" action="/iface_v01/author/login" target="_self">
-                                     
-                                            Email:<br>
-                                            <input type="email" name="email" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Z@-\.]+$"><br>
-                                              Secretkey (password):<br>
-                                              <input type="password" name="secret" autocomplete="on"><br><br>
-                                              <input type="submit" value="Submit">
-                        
+                                        <form method="POST" enctype="" accept-charset="utf-8" action="/iface_v01/recipe/create" target="_self">
+                                          <fieldset>
+                                            <legend>Write your recipe here:</legend>
+                                            Recipe title:<br>
+                                            <input type="text" name="title" required="on" autofocus="on" autocomplete="off" pattern="^[0-9a-zA-Zа-яА-Я-\.\s\S!?,\(\)]+$"><br>
+                                              Recipe (text):<br>
+                                              <textarea name="comment" cols="40" rows="3" required="on" name="content" autocomplete="off"></textarea><br><br>
+                                              May be one photo? Download here:<br>
+                                              <input type="file" name="filename">
+                                              <br><p></p>
+                                              <input type="reset" value="Clear form">
+                                              <input type="submit" formenctype="multipart/form-data" value="Submit">
+                                          </fieldset>
                                         </form> 
                                         </p>
 				</section>
@@ -81,7 +85,6 @@
 			
 		</div> <!-- #main -->
 	</div> <!-- #main-container -->
-
 <?php require 'main_footer.php'?>
 
 </body>

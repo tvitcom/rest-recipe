@@ -2,7 +2,7 @@ CREATE SEQUENCE integer_seq_author;
 CREATE TABLE author (
   id integer PRIMARY KEY DEFAULT nextval('integer_seq_author'),
   email varchar(63) NOT NULL,
-  login varchar(31) NOT NULL UNIQUE,
+  name varchar(31) NOT NULL UNIQUE,
   pass_hash varchar(127) NOT NULL,
   api_key varchar(127) DEFAULT NULL,
   ts_create integer,

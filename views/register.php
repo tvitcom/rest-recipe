@@ -51,19 +51,23 @@
 			<article>
 				<header>
 					<h1><?=$title?></h1>
-                                        <p>If you wish be register click <a href="/page/register" target="_self">register</a>.</p>
+                                        <p>If you wish be login click <a href="/page/login" target="_self">login</a>.</p>
 				</header>
 				<section>
 					<h2>Sign here:</h2>
 					<p>
                                         <form method="POST" accept-charset="utf-8" action="/iface_v01/author/login" target="_self">
-                                     
-                                            Email:<br>
-                                            <input type="email" name="email" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Z@-\.]+$"><br>
-                                              Secretkey (password):<br>
-                                              <input type="password" name="secret" autocomplete="on"><br><br>
+                                          <fieldset>
+                                            <legend>Personal information:</legend>
+                                                You name:<br>
+                                                <input type="text" name="name" autofocus="on" autocomplete="on" pattern="[A-Za-zА-Яа-яЁё/s-]{3,31}"><br>
+                                                Email:<br>
+                                            <input type="email" name="email" autocomplete="on" pattern="^[0-9a-zA-Z@-\.]+$"><br>
+                                                Secretkey (password):<br>
+                                                <input type="text" name="secret" autocomplete="off"><br>
+                                              <br><br>
                                               <input type="submit" value="Submit">
-                        
+                                          </fieldset>
                                         </form> 
                                         </p>
 				</section>
