@@ -3,6 +3,15 @@
 Web application for recipes with rest api on user and recipe items.
 Using [FlightPHP microframework](http://flightphp.com/learn), and two items/tables in database PostgreSQL.
 
+For example, we can create request:
+```
+https://recipe/iface_v01/author/select?email=test1@test.test&apikey=96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e
+```
+and recieve the json responce:
+```
+{"context":"\/iface_v01\/author\/select?email=test1@test.test&apikey=96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","result":{"id":"1","name":"tester","email":"test1@test.test","pass_hash":"HxqWlNprnK0WzV9VmNmk97RGyXjlHbNg3eHdBvPq6R","api_key":"96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","ts_create":"1519480215","ts_update":"1519480215","recover_key":""},"error":null}
+```
+
 # INSTALL:
 If you’re using Composer, you can run the following command:
 ```
