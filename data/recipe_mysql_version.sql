@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `author` (
   `id` bigint(21) unsigned NOT NULL,
   `email` varchar(63) NOT NULL,
-  `login` varchar(31) NOT NULL,
+  `name` varchar(31) NOT NULL,
   `pass_hash` varchar(127) NOT NULL,
   `api_key` varchar(127) DEFAULT NULL,
   `ts_create` int(11) NOT NULL,
