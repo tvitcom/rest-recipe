@@ -23,5 +23,6 @@ if ($_SERVER['REMOTE_ADDR']==='127.0.0.1') {
 } else {
     Flight::set('flight.log_errors', false);
 }
+Flight::set('limit',5);
 Flight::set('flight.views.path','views');
 Flight::set('flight.views.extension','.php');

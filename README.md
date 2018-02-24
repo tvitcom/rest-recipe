@@ -24,8 +24,14 @@ URL: | Method: | REST-link:
 /   [POST]  recipe/update
 /   [POST]  recipe/delete
 ---------------------------
+//REST Api will receive POST or GET REQUEST string like:
 
- //REST Api will return json-string like:
+[
+    "apikey":"api_key_string",
+    ...
+]
+
+//REST Api will return json-string like:
  
     {
         "context":"",

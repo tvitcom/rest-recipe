@@ -20,17 +20,40 @@
 class Author extends Model
 {
     public function __construct() {
-        $this->name = 'John Doe';
+        return;
+    }
+    
+    /*
+     * Test is users email assign to existent user and is valid api_key or not
+     * @return user id or false;
+     */
+    public static function is_user($email, $secret)
+    {
+        $query = Mysql::getInstance()->prepare('
+            SELECT id, email, pass_hash, api_key, ts_cretate, ts_update, recovery_key
+            FROM author
+            WHERE email=:email limit :limit
+        ');
+        $query->BindValue(':email', $email, PDO::PARAM_STR);
+        $query->BindValue(':limit', 1, PDO::PARAM_INT);
+        $query->execute();
+        $author = $query->fetch(PDO::FETCH_ASSOC);
+        if ($author['api_key'])
+            return $author['id'];
+        else {
+            return false;
+        }
     }
 
     public static function login($email, $secret)
     {
-        $query = Pgsql::getInstance()->prepare('
+        $query = Mysql::getInstance()->prepare('
             SELECT id, email, pass_hash, api_key, ts_cretate, ts_update, recovery_key
             FROM author
-            WHERE email=:email AND is_active=1 limit 1
+            WHERE email=:email limit :limit
         ');
         $query->BindValue(':email', $email, PDO::PARAM_STR);
+        $query->BindValue(':limit', 1, PDO::PARAM_INT);
         $query->execute();
         $author = $query->fetch(PDO::FETCH_ASSOC);
         return $author;
@@ -38,18 +61,18 @@ class Author extends Model
 
 //    public static function count()
 //    {
-//        $query = Pgsql::getInstance()->query("
+//        $query = Mysql::getInstance()->query("
 //            SELECT count(*) as quantity
 //            FROM  author
-//            WHERE is_active = 1"
+//            WHERE api_key IS NOT NULL"
 //        );
 //        return $query->fetch(PDO::FETCH_ASSOC);
 //    }
 
-    public static function update($data = array())
+    public static function update($data)
     {
         if (!count($data))
-            return;
+            return false;
         $query = "
             UPDATE author
             SET (
@@ -62,7 +85,7 @@ class Author extends Model
                 is_active=:is_active)
             WHERE id = :id
             ";
-        $query = Pgsql::getInstance()->prepare($query);
+        $query = Mysql::getInstance()->prepare($query);
         $query->bindValue(':id', $data['id'], PDO::PARAM_INT);
         $query->bindValue(':fio', $data['fio'], PDO::PARAM_STR);
         $query->bindValue(':whois', $data['whois'], PDO::PARAM_STR);
@@ -74,13 +97,12 @@ class Author extends Model
         $query->bindValue(':photo', $data['photo'], PDO::PARAM_STR);
         $query->bindValue(':rights', $data['rights'], PDO::PARAM_STR);
         $query->bindValue(':t_passhash', $data['t_passhash'], PDO::PARAM_STR);
-        $query->bindValue(':is_active', $data['is_active'], PDO::PARAM_BOOL);
         $query->execute();
     }
 
     public static function delete($author_id = 0)
     {
-        $query = Pgsql::getInstance()->prepare("DELETE FROM author WHERE id = :id");
+        $query = Mysql::getInstance()->prepare("DELETE FROM author WHERE id = :id");
         $query->bindValue(':id', $author_id, PDO::PARAM_INT);
         $result = $query->execute();
         return $result;
@@ -88,39 +110,37 @@ class Author extends Model
 
     public static function create($data)
     {
-        $query = Pgsql::getInstance()->prepare("
+        $query = Mysql::getInstance()->prepare("
             INSERT INTO author
-            VALUES (:id,:fio,:whois,:email,:passhash,:credit_card,:card_expire,
-                    :sex,:photo,:rights,:t_passhash,:is_active)
+            VALUES (:name, :email, :pass_hash, :api_key, :ts_create, :ts_update, :recover_key)
         ");
-        $query->bindValue(':id', '', PDO::PARAM_STR);
-        $query->bindValue(':fio', $data['fio'], PDO::PARAM_STR);
-        $query->bindValue(':whois', $data['whois'], PDO::PARAM_STR);
+        //-$query->bindValue(':id', '', PDO::PARAM_STR);
+        $query->bindValue(':name', $data['name'], PDO::PARAM_STR);
         $query->bindValue(':email', $data['email'], PDO::PARAM_STR);
-        $query->bindValue(':passhash', $data['passhash'], PDO::PARAM_STR);
-        $query->bindValue(':credit_card', $data['credit_card'], PDO::PARAM_STR);
-        $query->bindValue(':card_expire', $data['card_expire'], PDO::PARAM_STR);
-        $query->bindValue(':sex', $data['sex'], PDO::PARAM_BOOL);
-        $query->bindValue(':photo', $data['photo'], PDO::PARAM_STR);
-        $query->bindValue(':rights', $data['rights'], PDO::PARAM_STR);
-        $query->bindValue(':t_passhash', $data['t_passhash'], PDO::PARAM_STR);
-        $query->bindValue(':is_active', $data['is_active'], PDO::PARAM_BOOL);
+        $query->bindValue(':pass_hash', Auth::hash($data['secret']), PDO::PARAM_STR);
+        $query->bindValue(':api_key', hash('sha256', $data['secret']), PDO::PARAM_STR);
+        $query->bindValue(':ts_create', time(), PDO::PARAM_STR);
+        $query->bindValue(':tc_update', time(), PDO::PARAM_BOOL);
+        $query->bindValue(':recover_key', '', PDO::PARAM_STR);
+
         try
         {
             $query->execute();
-            return true;
+            //return $query->lastInsertId('seq_author_id_integer');
+            return $query->lastInsertId();
         }
         catch (PDOException $e)
         {
-            echo '{"notice":"' . addslashes($e->getMessage()) . '"}';
-            exit();
+            Flight::set('error','{"notice":"' . addslashes($e->getMessage()) . '"}');
+            exit(Flight::get('error'));
         };
     }
 
-    public static function select($email = '')
+    public static function select($identity = '')
     {
-        if (!empty($email)) {
-            $author = Pgsql::getInstance()->prepare('
+        // If $identity is email string.
+        if (is_string($identity)) {
+            $author = Mysql::getInstance()->prepare('
                 SELECT id, fio, whois, email, passhash, credit_card, card_expire,
                              sex, photo, rights, t_passhash, is_active
                 FROM author
