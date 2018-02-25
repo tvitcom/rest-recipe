@@ -27,22 +27,22 @@ require_once 'models/mysql.php';
 require_once 'models/model.php';
 require_once 'models/Author.php';//because is as the user class and be always accessible.
 
-// Work with REST Api:
-Flight::route('GET|POST /iface_v01(/@entity(/@method))', function($entity, $method){
-    $classname = ucfirst($entity);
-    
-    // load only file of entity class;
-    $fpath_model = 'models'.DS.$classname.'.php';
+// Work with REST Api - GET:
+Flight::route('GET /iface_v01(/@entity(/@method))', function($entity, $method){
+    require_once 'models/model_loader.php';
     if (file_exists($fpath_model)) {
         require_once $fpath_model;
         if (method_exists($classname, $method)) {
             $apikey_data = isset($_REQUEST['apikey'])?$_REQUEST['apikey']:'';
             if (Author::is_user($apikey_data) 
                 || ($entity ==='person' && $method ==='create') 
-                || $method ==='login' 
+                || $method ==='login'
                 || $method ==='logout') {
-                $params = count($_GET)?$_GET:$_POST;
+                
+                $params = count($_GET)?$_GET:'';
                 Flight::set('result', $classname::{$method}($params));
+            
+                
             } else {
                 Flight::halt(403, 'Error 403 Not authorized.');
                 exit();
@@ -51,7 +51,48 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method))', function($entity, $meth
             Flight::halt(404,'Error 404. Page not found.');
             exit();
         }
-        
+        /*
+         * Format returned json:
+         * {
+         * context:string,
+         * result:string,
+         * error:string
+         * }
+         */
+        Flight::json([
+            'context'=> $_SERVER['REQUEST_URI'],
+            'result'=> Flight::get('result'), 
+            'error'=> Flight::get('error'),
+        ]);
+    } else { 
+        Flight::halt(404, 'Error 404. Page not found!');
+    }
+});
+
+//Work with REST Api - POST:
+Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
+    require_once 'models/model_loader.php';
+    if (file_exists($fpath_model)) {
+        require_once $fpath_model;
+        if (method_exists($classname, $method)) {
+            $apikey_data = isset($_REQUEST['apikey'])?$_REQUEST['apikey']:'';
+            if (Author::is_user($apikey_data) 
+                || ($entity ==='person' && $method ==='create') 
+                || $method ==='login') {
+                
+                $params = count($_POST)?$_POST:"";
+                Flight::set('result', $classname::{$method}($params));
+            
+                
+            } else {
+                Flight::halt(403, 'Error 403 Not authorized.');
+                exit();
+            }
+        } else {
+            Flight::halt(404,'Error 404. Page not found.');
+            exit();
+        }
+exit("YO!");
         /*
          * Format returned json:
          * {
