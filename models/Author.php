@@ -39,17 +39,15 @@ class Author extends Model
         $author = $query->fetch(PDO::FETCH_ASSOC);
         
         if ($author['api_key'] != '') {
-            $author_id = Auth::setLogin(self::select($author['id']));
-            return $author_id;
+            return Auth::setLogin(self::select($author['id'],'id'));
         } else {
             return false;
         }
     }
     
-    public static function select($param = 0, $type='id')
+    public static function selectById($param = '')
     {
-        // If $identity is email array or not (another one be int id).
-        if ($type === 'id') {
+         if ($type === 'id') {
             $author = Mysql::getInstance()->prepare('
                 SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
                 FROM author
@@ -64,10 +62,19 @@ class Author extends Model
                 WHERE email = :email
                 LIMIT 1
             ');
-            $author->bindValue(':email', $param, PDO::PARAM_STR);
+            $author->bindValue(':param', $param['email'], PDO::PARAM_STR);
         }
-        $author->execute();
-        return $author->fetch(PDO::FETCH_ASSOC);
+//        } elseif ($type === 'apikey') {
+//            $author = Mysql::getInstance()->prepare('
+//                SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
+//                FROM author
+//                WHERE api_key = :apikey
+//                LIMIT 1
+//            ');
+//            $author->bindValue(':apikey', $param['apikey'], PDO::PARAM_STR);
+//        }
+        $result = $author->execute();
+        return $result;
     }
     
     public static function create($data = [])
