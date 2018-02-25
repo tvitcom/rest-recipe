@@ -63,11 +63,11 @@ class Recipe extends Model {
         $query = "
             UPDATE recipe
             SET (
+                ts_create=:ts_create,
                 title=:title,
                 content=:content,
                 picture_uri=:picture_uri,
                 is_enable=:is_enable,
-                ts_create=:ts_create,
             WHERE id = :id and aothor_id = :author_id
             ";
         $query = Mysql::getInstance()->prepare($query);
@@ -79,6 +79,7 @@ class Recipe extends Model {
         $query->bindValue(':picture_uri', $data['picture_uri'], PDO::PARAM_STR);
         $query->bindValue(':is_enable', 1, PDO::PARAM_INT);
         $query->execute();
+        return Mysql::getInstance()->lastInsertId();
     }
 
     public static function deleteOwn($id = 0)
