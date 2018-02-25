@@ -24,7 +24,7 @@
 defined('DS') or define('DS', '/');// Define directory separator sign.
 
 if ($_SERVER['REMOTE_ADDR']==='127.0.0.1') {
-    defined('WEB_DEBUG') or define('WEB_DEBUG', 'false');// Define directory separator sign.
+    defined('WEB_DEBUG') or define('WEB_DEBUG', 'true');// Define directory separator sign.
     Flight::set('flight.log_errors', true);
     Flight::set('flight.handle_errors', true);
 } else {
@@ -33,5 +33,6 @@ if ($_SERVER['REMOTE_ADDR']==='127.0.0.1') {
     Flight::set('flight.handle_errors', false);
 }
 Flight::set('limit_last_list',5);
+Flight::set('hash_salt','berRaWeliUD');
 Flight::set('flight.views.path','views');
 Flight::set('flight.views.extension','.php');

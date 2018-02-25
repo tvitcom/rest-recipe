@@ -20,5 +20,17 @@
 <div id="footer-container">
     <footer class="wrapper">
         <h3>tvitcom@github.com @ All right reserved. <?=date('Y')?></h3>
+        <?php 
+        if (WEB_DEBUG) {
+            echo '<pre>';
+            
+            echo '1) Hash: '. Auth::hash('test123').'<br>';
+            //echo '2) Auth::isLogged: '.var_dump(Auth::isLogged()).'<br>';
+            //echo '3) session_start(): '. var_dump(session_start()).'<br>';
+            //echo '4) $_SESSION: '.var_dump($_SESSION).'<br>';
+            
+            echo '</pre>';
+        }
+        ?>
     </footer>
 </div>

@@ -100,8 +100,8 @@ class Recipe extends Model {
         //$query->bindValue(':id', '', PDO::PARAM_STR);
         $query->bindValue(':name', $data['name'], PDO::PARAM_STR);
         $query->bindValue(':email', $data['email'], PDO::PARAM_STR);
-        $query->bindValue(':pass_hash', Auth::hash($data['secret']), PDO::PARAM_STR);
-        $query->bindValue(':api_key', hash('sha256', $data['secret']), PDO::PARAM_STR);
+        $query->bindValue(':pass_hash', Auth::hash($data['password']), PDO::PARAM_STR);
+        $query->bindValue(':api_key', hash('sha256', $data['password']), PDO::PARAM_STR);
         $query->bindValue(':ts_create', time(), PDO::PARAM_INT);
         $query->bindValue(':ts_update', time(), PDO::PARAM_INT);
         $query->bindValue(':recover_key', '', PDO::PARAM_STR);

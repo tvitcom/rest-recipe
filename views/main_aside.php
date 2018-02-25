@@ -18,7 +18,7 @@
  */
 ?>
 <aside>
-    <h3>Fortest only:</h3>
+    <h3>For test only:</h3>
     <p>
     <ul>
         <li><a href="https://recipe/iface_v01/author/login?apikey=96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e">author/login with valid apikey</a></li>
