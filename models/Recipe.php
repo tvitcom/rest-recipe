@@ -91,20 +91,19 @@ class Recipe extends Model {
         return $result;
     }
 
-    public static function createOwn($data)
+    public static function create($data)
     {
         $query = Mysql::getInstance()->prepare("
-            INSERT INTO recipe (name, email, pass_hash, api_key, ts_create, ts_update, recover_key)
-            VALUES (:name, :email, :pass_hash, :api_key, :ts_create, :ts_update, :recover_key)
+            INSERT INTO recipe (author_id, ts_create, title, content, picture_uri, is_enable)
+            VALUES (:author_id, :ts_create, :title, :content, :picture_uri, :is_enable)
         ");
         //$query->bindValue(':id', '', PDO::PARAM_STR);
-        $query->bindValue(':name', $data['name'], PDO::PARAM_STR);
-        $query->bindValue(':email', $data['email'], PDO::PARAM_STR);
-        $query->bindValue(':pass_hash', Auth::hash($data['password']), PDO::PARAM_STR);
-        $query->bindValue(':api_key', hash('sha256', $data['password']), PDO::PARAM_STR);
+        $query->bindValue(':author_id', $_SESSION['user_id'], PDO::PARAM_STR);
         $query->bindValue(':ts_create', time(), PDO::PARAM_INT);
-        $query->bindValue(':ts_update', time(), PDO::PARAM_INT);
-        $query->bindValue(':recover_key', '', PDO::PARAM_STR);
+        $query->bindValue(':title', Filtr::txt($data['title']), PDO::PARAM_STR);
+        $query->bindValue(':content', Filtr::txt($data['content'],2048), PDO::PARAM_STR);
+        $query->bindValue(':picture_uri', md5(Filtr::pwd($data['filename'])), PDO::PARAM_INT);
+        $query->bindValue(':is_enable', 1, PDO::PARAM_INT);
 
         try
         {
