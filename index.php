@@ -30,13 +30,13 @@ require_once 'models/Author.php';//because is as the user class and be always ac
 Flight::route('GET|POST /iface_v01(/@entity(/@method))', function($entity, $method){
     $classname = ucfirst($entity);
     
-    // load only entity classe;
+    // load only file of entity class;
     $fpath_model = 'models'.DS.$classname.'.php';
     if (file_exists($fpath_model)) {
         require_once $fpath_model;
         if (method_exists($classname, $method)) {
             $apikey_data = isset($_REQUEST['apikey'])?$_REQUEST['apikey']:'';
-            if (Author::is_user($apikey_data) || $method ==='create') {
+            if (Author::is_user($apikey_data) || ($entity ==='person' && $method ==='create')) {
                 $params = count($_GET)?$_GET:$_POST;
                 Flight::set('result', $classname::{$method}($params));
             } else {
