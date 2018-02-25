@@ -124,12 +124,13 @@ class Recipe extends Model {
         $recipe = Mysql::getInstance()->prepare('
             SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
             FROM recipe
-            WHERE author_id = :id
+            WHERE author_id = :id AND is_enable = :is_enable
             LIMIT :limit
         ');
         $recipe->bindValue(':id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $recipe->bindValue(':is_enable', 1, PDO::PARAM_INT);
         $recipe->bindValue(':limit', intval(Flight::get('limit_last_list')), PDO::PARAM_INT);
         $recipe->execute();
-        return $recipe->fetch(PDO::FETCH_ASSOC);
+        return $recipe->fetchAll(PDO::FETCH_ASSOC);
     }
 }
