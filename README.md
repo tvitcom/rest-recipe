@@ -34,12 +34,17 @@ and then load recipe.sql to database.
 ```
 URL:       | Method:| REST-link:
 ----------------------------------------
-/iface_v01/   [POST]  author/login
-/iface_v01/   [POST]  author/create
-/iface_v01/   [GET]   recipe/selectLast
-/iface_v01/   [POST]  recipe/create
-/iface_v01/   [POST]  recipe/updateOwn
-/iface_v01/   [POST]  recipe/deleteOwn
+/iface_v01/   [GET]  author/selectById
+/iface_v01/   [GET]  author/selectByEmail
+/iface_v01/   [GET]  author/selectByApikey
+/iface_v01/   [POST] author/login
+/iface_v01/   [POST] author/create
+/iface_v01/   [GET]  recipe/selectLast
+/iface_v01/   [GET]  recipe/selectById
+/iface_v01/   [GET]  recipe/selectByAuthorId
+/iface_v01/   [POST] recipe/create
+/iface_v01/   [POST] recipe/updateOwn
+/iface_v01/   [POST] recipe/deleteOwn
 ----------------------------------------
 //REST Api will receive POST or GET REQUEST string like:
 
