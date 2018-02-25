@@ -81,6 +81,7 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
                 || $method ==='login') {
                 
                 $params = count($_POST)?$_POST:"";
+//exit(var_dump($params));
                 Flight::set('result', $classname::{$method}($params));
             
                 
@@ -92,7 +93,6 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
             Flight::halt(404,'Error 404. Page not found.');
             exit();
         }
-exit("YO!");
         /*
          * Format returned json:
          * {
