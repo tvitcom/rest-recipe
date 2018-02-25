@@ -19,8 +19,8 @@
 
 require 'vendor/autoload.php';
 
-require_once 'secure/Auth.php';
-require_once 'secure/Filtr.php';
+require_once 'helpers/Auth.php';
+require_once 'helpers/Filtr.php';
 require_once 'models/config.php';
 //require_once 'models/pgsql.php';
 require_once 'models/mysql.php';
@@ -79,11 +79,14 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
             if (Author::is_user($apikey_data) 
                 || ($entity ==='person' && $method ==='create') 
                 || $method ==='login') {
+
+                if (isset($_FILES) && count($_FILES)) {
+                    require_once 'helpers/Files.php';
+                    Files::uploadHandle();
+                }
                 
                 $params = count($_POST)?$_POST:"";
-//exit(var_dump($params));
                 Flight::set('result', $classname::{$method}($params));
-            
                 
             } else {
                 Flight::halt(403, 'Error 403 Not authorized.');
@@ -116,6 +119,10 @@ Flight::route('GET /page(/@name)', function($name){
     // load only stored files;
     $pagename = Flight::get('flight.views.path').DS.$name.Flight::get('flight.views.extension');
     //exit($pagename);
+    if ($name === 'new' && !Auth::isLogged())
+        Flight::redirect('/page/login');
+        
+    
     if (file_exists($pagename)) {
         Flight::render($name, [
             'title' => ucfirst($name),

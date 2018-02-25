@@ -113,11 +113,12 @@ class Author extends Model
     
     public static function login($post) {
 //exit(Filtr::txt($_POST['email']));
-        $user = self::selectByEmail(Filtr::txt($_POST['email']));
 //exit('<pre>'.var_dump($user).'</pre>');
-        if (empty($_POST)) {
+        if (empty($_POST) && !Auth::isLogged()) {
                 Flight::redirect('/page/login');
-        } elseif(is_array($user) && (Auth::hash(Filtr::pwd($_POST['password'])) === $user['pass_hash'])) {
+        }
+        $user = self::selectByEmail(Filtr::txt($_POST['email']));
+        if (is_array($user) && (Auth::hash(Filtr::pwd($_POST['password'])) === $user['pass_hash'])) {
             Auth::setLogin($user);
             Flight::redirect('/page/list');
         } else {
