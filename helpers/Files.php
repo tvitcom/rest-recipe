@@ -16,21 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-?>
-<div id="footer-container">
-    <footer class="wrapper">
-        <h3>tvitcom@github.com @ All right reserved. <?=date('Y')?></h3>
-        <?php 
-        if (WEB_DEBUG) {
-            echo '<pre>';
-            
-            echo '1) Hash: '. Auth::hash('test123').'<br>';
-            echo '2) var_dump($_FILES) '.var_dump(var_dump($_FILES)).'<br>';
-            //echo '3) session_start(): '. var_dump(session_start()).'<br>';
-            //echo '4) $_SESSION: '.var_dump($_SESSION).'<br>';
-            
-            echo '</pre>';
-        }
-        ?>
-    </footer>
-</div>
+class Files {
+    public static function uploadHandler(){
+        if ($_FILES[''])
+        $newfilename = md5($oldfilename . Flight::get(hash_salt));
+        return $newfilename;
+    }
+}
