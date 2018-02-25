@@ -24,7 +24,7 @@ class Auth
         if (null !==@$_SESSION['user_id'])
             return $_SESSION['user_id'];
         else 
-            return;
+            return false;
     }
 
     public static function setLogin($user)

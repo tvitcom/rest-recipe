@@ -20,11 +20,11 @@
 /*
  * URL:       | Method:| REST-link:
 ----------------------------------------
-/iface_v01/   [POST]  author/login
-/iface_v01/   [POST]  author/create
+/iface_v01/   [POST]  recipe/login
+/iface_v01/   [POST]  recipe/create
  * * * * * * * * * *  
 /iface_v01/   [GET]   recipe/selectLast
-/iface_v01/   [POST]  recipe/createOwn
+/iface_v01/   [POST]  recipe/create
 /iface_v01/   [POST]  recipe/updateOwn
 /iface_v01/   [POST]  recipe/deleteOwn
  */
@@ -42,15 +42,15 @@ class Recipe extends Model {
     {
         $query = Mysql::getInstance()->prepare('
             SELECT id, email, pass_hash, api_key, ts_create, ts_update, recover_key
-            FROM author
-            WHERE api_key = :api_key limit 1
+            FROM recipe
+            WHERE id = :id limit 1
         ');
-        $query->BindValue(':api_key', $api_key, PDO::PARAM_STR);
+        $query->BindValue(':id', intval($own_id), PDO::PARAM_INT);
         $query->execute();
-        $author = $query->fetch(PDO::FETCH_ASSOC);
+        $recipe = $query->fetch(PDO::FETCH_ASSOC);
         
-        if ($author['api_key'] != '') {
-            return $author['id'];
+        if ($recipe['api_key'] != '') {
+            return $recipe['id'];
         } else {
             return false;
         }
@@ -61,33 +61,31 @@ class Recipe extends Model {
         if (!count($data))
             return false;
         $query = "
-            UPDATE author
+            UPDATE recipe
             SET (
-                name=:name,
-                email=:email,
-                pass_hash=:pass_hash,
-                api_key=:api_key,
-                ts_update=:ts_update,
-                recover_key=:recover_key,
-            WHERE id = :id
+                title=:title,
+                content=:content,
+                picture_uri=:picture_uri,
+                is_enable=:is_enable,
+                ts_create=:ts_create,
+            WHERE id = :id and aothor_id = :author_id
             ";
         $query = Mysql::getInstance()->prepare($query);
         $query->bindValue(':id', $data['id'], PDO::PARAM_STR);
-        $query->bindValue(':name', $data['name'], PDO::PARAM_STR);
-        $query->bindValue(':email', $data['email'], PDO::PARAM_STR);
-        $query->bindValue(':pass_hash', Auth::hash($data['secret']), PDO::PARAM_STR);
-        $query->bindValue(':api_key', hash('sha256', $data['secret']), PDO::PARAM_STR);
-        //$query->bindValue(':ts_create', time(), PDO::PARAM_INT);
-        $query->bindValue(':ts_update', time(), PDO::PARAM_INT);
-        $query->bindValue(':recover_key', '', PDO::PARAM_STR);
+        $query->bindValue(':author_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $query->bindValue(':ts_create', time(), PDO::PARAM_INT);
+        $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
+        $query->bindValue(':content', $data['content'], PDO::PARAM_STR);
+        $query->bindValue(':picture_uri', $data['picture_uri'], PDO::PARAM_STR);
+        $query->bindValue(':is_enable', 1, PDO::PARAM_INT);
         $query->execute();
     }
 
     public static function deleteOwn($id = 0)
     {
-        $query = Mysql::getInstance()->prepare("DELETE FROM recipe WHERE id = :id and author_id = :author_id");
+        $query = Mysql::getInstance()->prepare("DELETE FROM recipe WHERE id = :id and recipe_id = :recipe_id");
         $query->bindValue(':id', $id, PDO::PARAM_INT);
-        $query->bindValue(':author_id', $author_id, PDO::PARAM_INT);
+        $query->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
         $result = $query->execute();
         return $result;
     }
@@ -95,7 +93,7 @@ class Recipe extends Model {
     public static function createOwn($data)
     {
         $query = Mysql::getInstance()->prepare("
-            INSERT INTO author (name, email, pass_hash, api_key, ts_create, ts_update, recover_key)
+            INSERT INTO recipe (name, email, pass_hash, api_key, ts_create, ts_update, recover_key)
             VALUES (:name, :email, :pass_hash, :api_key, :ts_create, :ts_update, :recover_key)
         ");
         //$query->bindValue(':id', '', PDO::PARAM_STR);
@@ -110,7 +108,7 @@ class Recipe extends Model {
         try
         {
             $query->execute();
-            //return $query->lastInsertId('seq_author_id_integer');
+            //return $query->lastInsertId('seq_recipe_id_integer');
             return Mysql::getInstance()->lastInsertId();
         }
         catch (PDOException $e)
@@ -121,16 +119,17 @@ class Recipe extends Model {
         };
     }
 
-    public static function selectLast($count = 5)
+    public static function selectLast($params)
     {
-        $author = Mysql::getInstance()->prepare('
-            SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
-            FROM author
-            WHERE id = :id
-            LIMIT 1
+        $recipe = Mysql::getInstance()->prepare('
+            SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
+            FROM recipe
+            WHERE author_id = :id
+            LIMIT :limit
         ');
-        $author->bindValue(':id', $identity, PDO::PARAM_INT);
-        $author->execute();
-        return $author->fetch(PDO::FETCH_ASSOC);
+        $recipe->bindValue(':id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $recipe->bindValue(':limit', intval(Flight::get('limit_last_list')), PDO::PARAM_INT);
+        $recipe->execute();
+        return $recipe->fetch(PDO::FETCH_ASSOC);
     }
 }

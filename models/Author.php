@@ -34,12 +34,13 @@ class Author extends Model
             FROM author
             WHERE api_key = :api_key limit 1
         ');
-        $query->BindValue(':api_key', $api_key, PDO::PARAM_STR);
+        $query->BindValue(':api_key', $apikey, PDO::PARAM_STR);
         $query->execute();
         $author = $query->fetch(PDO::FETCH_ASSOC);
         
         if ($author['api_key'] != '') {
-            return $author['id'];
+            $author_id = Auth::setLogin(self::select($author['id']));
+            return $author_id;
         } else {
             return false;
         }
@@ -54,7 +55,7 @@ class Author extends Model
             WHERE id = :id
             LIMIT 1
         ');
-        $author->bindValue(':id', $identity, PDO::PARAM_INT);
+        $author->bindValue(':id', $id, PDO::PARAM_INT);
         $author->execute();
         return $author->fetch(PDO::FETCH_ASSOC);
     }
@@ -89,6 +90,6 @@ class Author extends Model
     }
     
     public static function login($post) {
-        return;
+        return $_SESSION['user_id'];
     }
 }

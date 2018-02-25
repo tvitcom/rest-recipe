@@ -27,27 +27,25 @@ require_once 'models/model.php';
 require_once 'models/Author.php';//because is as the user class and be always accessible.
 
 // Work with REST Api:
-Flight::route('GET|POST /iface_v01(/@entity(/@method(/@id)))', function($entity, $method, $id){
+Flight::route('GET|POST /iface_v01(/@entity(/@method))', function($entity, $method){
     $classname = ucfirst($entity);
     
     // load only entity classe;
     $fpath_model = 'models/'.$classname.'.php';
     if (file_exists($fpath_model) && isset($_GET['apikey']) && $_GET['apikey']!='') {
         require_once $fpath_model;
-        
         if (method_exists($classname, $method)) {
-            if ($_SERVER['REQUEST_METHOD']==='POST' && Author::is_user($_POST['apikey'])) {
-                $params = (isset($id) && $id != '') ? $id : $_POST;
+            $query_method = '$_'.$_SERVER['REQUEST_METHOD'];
+            if (Author::is_user($_REQUEST['apikey'])) {
+                $params = count($_GET)?$_GET:$_POST;
                 Flight::set('result', $classname::{$method}($params));
-            } elseif ($_SERVER['REQUEST_METHOD']==='GET' && Author::is_user($_GET['apikey'])) {
-                Flight::set('result', $classname::{$method}($_GET));
-                exit($params);
             } else {
                 Flight::halt(403, 'Error 403 Not authorized.');
                 exit();
             }
         } else {
-            Flight::set('error','action not found');
+            Flight::halt(404,'Error 404. Page not found.');
+            exit();
         }
         
         /*
