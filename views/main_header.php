@@ -24,7 +24,11 @@
 				<ul>
 					<li><a href="/page/list">List</a></li>
 					<li><a href="/page/new">Add Recipe</a></li>
-					<li><a href="/page/login">Login</a></li>
+                    <?php if (Auth::isLogged()) { ?>
+					<li><a href="/iface_v01/author/logout">Logout</a></li>
+                    <?php } else { ?>
+                    <li><a href="/page/login">Login</a></li>
+                    <?php } ?>
 				</ul>
 			</nav>
 		</header>

@@ -17,6 +17,12 @@
  * limitations under the License
  */
 
+/* ------ SESSION TEST! ------------ */
+if (!session_start()) {
+    header('HTTP/1.0 501');
+    exit('<font color="red"><h3>501 Session parameters not implemented<h3></font>');
+}
+
 class Auth
 {
     public static function isLogged()
@@ -38,22 +44,15 @@ class Auth
     }
 
     public static function setLogout(){
-        $_SESSION = array();
+        $_SESSION = [];
         session_unset();
         session_destroy();
         session_regenerate_id(true);
         return true;
     }
 
-    public static function hash($pass = '', $tstamp = '') {
-        $tstamp = ($tstamp!=='')?$tstamp:time(); 
-        if (($pass == true)){
-            $half_hash = base64_encode(
-                hash_hmac('sha256', $pass, $tstamp, true)
-            );
-            return substr($half_hash, 0, -2);
-        } else
-            return false;
+    public static function hash($password = '') {
+            return hash('sha256',$password.Flight::get('hash_salt'));
     }
 
     public static function affirm($email='',$time=''){

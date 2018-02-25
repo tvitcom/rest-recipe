@@ -60,8 +60,8 @@
                                      
                                             Email:<br>
                                             <input type="email" name="email" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Z@-\.]+$"><br>
-                                              Secretkey (password):<br>
-                                              <input type="password" name="secret" autocomplete="on"><br><br>
+                                            Password:<br>
+                                              <input type="password" name="password" autocomplete="on"><br><br>
                                               <input type="submit" value="Submit">
                         
                                         </form> 

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
+
 require 'vendor/autoload.php';
 
 require_once 'secure/Auth.php';
@@ -36,7 +37,7 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method))', function($entity, $meth
         require_once $fpath_model;
         if (method_exists($classname, $method)) {
             $apikey_data = isset($_REQUEST['apikey'])?$_REQUEST['apikey']:'';
-            if (Author::is_user($apikey_data) || ($entity ==='person' && $method ==='create')) {
+            if (Author::is_user($apikey_data) || ($entity ==='person' && $method ==='create') || $method ==='login' || $method ==='logout') {
                 $params = count($_GET)?$_GET:$_POST;
                 Flight::set('result', $classname::{$method}($params));
             } else {

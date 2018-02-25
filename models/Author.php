@@ -46,16 +46,26 @@ class Author extends Model
         }
     }
     
-    public static function select($id = 0)
+    public static function select($param = 0, $type='id')
     {
         // If $identity is email array or not (another one be int id).
-        $author = Mysql::getInstance()->prepare('
-            SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
-            FROM author
-            WHERE id = :id
-            LIMIT 1
-        ');
-        $author->bindValue(':id', $id, PDO::PARAM_INT);
+        if ($type === 'id') {
+            $author = Mysql::getInstance()->prepare('
+                SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
+                FROM author
+                WHERE id = :id
+                LIMIT 1
+            ');
+            $author->bindValue(':id', $param, PDO::PARAM_INT);
+        } elseif ($type === 'email') {
+            $author = Mysql::getInstance()->prepare('
+                SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
+                FROM author
+                WHERE email = :email
+                LIMIT 1
+            ');
+            $author->bindValue(':email', $param, PDO::PARAM_STR);
+        }
         $author->execute();
         return $author->fetch(PDO::FETCH_ASSOC);
     }
@@ -69,8 +79,8 @@ class Author extends Model
         //$query->bindValue(':id', '', PDO::PARAM_STR);
         $query->bindValue(':name', $data['name'], PDO::PARAM_STR);
         $query->bindValue(':email', $data['email'], PDO::PARAM_STR);
-        $query->bindValue(':pass_hash', Auth::hash($data['secret']), PDO::PARAM_STR);
-        $query->bindValue(':api_key', hash('sha256', $data['secret']), PDO::PARAM_STR);
+        $query->bindValue(':pass_hash', hash('sha256',$data['password'].Flight::get('hash_salt')), PDO::PARAM_STR);
+        $query->bindValue(':api_key', hash('sha256', $data['password']), PDO::PARAM_STR);
         $query->bindValue(':ts_create', time(), PDO::PARAM_INT);
         $query->bindValue(':ts_update', time(), PDO::PARAM_INT);
         $query->bindValue(':recover_key', '', PDO::PARAM_STR);
@@ -90,6 +100,19 @@ class Author extends Model
     }
     
     public static function login($post) {
-        return $_SESSION['user_id'];
+        $user = self::select(Filtr::txt($_POST['email']),'email');
+//exit('<pre>'.var_dump($user).'</pre>');
+        if ( is_array($user) && (Auth::hash(Filtr::pwd($_POST['password'])) === $user['pass_hash'])) {
+                Auth::setLogin($user);
+                Flight::redirect('/page/list');
+        } else {
+            Flight::halt(401,'Error 401 Not authorized.');
+            exit('Filtr::txt($_POST[\'email\']:'.Filtr::txt($_POST['email']).' $user[\'pass_hash\']:'.$user['pass_hash'].' Filtr::pwd($_POST[\'password\']:'.Filtr::pwd($_POST['password']));
+        }
+    }
+    
+    public static function logout($params) {
+        Auth::setLogout();
+        Flight::redirect('/page/login');
     }
 }
