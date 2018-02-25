@@ -50,7 +50,13 @@
 			<article>
 				<header>
 					<h1><?=$title?> recipe</h1>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sodales urna non odio egestas tempor. Nunc vel vehicula ante. Etiam bibendum iaculis libero, eget molestie nisl pharetra in. In semper consequat est, eu porta velit mollis nec.</p>
+                    <?php if (Auth::isLogged()) { ?>
+                    <pre>Yuo API_KEY: <?php echo isset($_SESSION['api_key'])?$_SESSION['api_key']:'none' ?></pre>
+                    <?php } else {?>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. .</p>
+                    <?php } ?>
+					
+					
 				</header>
 				<section>
 					<h2>Fill here:</h2>
@@ -59,9 +65,10 @@
                                           <fieldset>
                                             <legend>Write your recipe here:</legend>
                                             Recipe title:<br>
-                                            <input type="text" name="title" required="on" autofocus="on" autocomplete="off" pattern="^[0-9a-zA-Zа-яА-Я-\.\s\S!?,\(\)]+$"><br>
+                                            <input type="hidden" name="apikey" value="<?php echo isset($_SESSION['api_key'])?$_SESSION['api_key']:'none' ?>"><br>
+                                            <input type="text" name="title" required="on" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Zа-яА-Я-\.\s\S!?,\(\)]+$"><br>
                                               Recipe (text):<br>
-                                              <textarea name="comment" cols="40" rows="3" required="on" name="content" autocomplete="off"></textarea><br><br>
+                                              <textarea name="content" cols="40" rows="3" required="on" autocomplete="on"></textarea><br><br>
                                               May be one photo? Download here:<br>
                                               <input type="file" name="filename">
                                               <br><p></p>
