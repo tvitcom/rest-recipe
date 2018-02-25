@@ -39,42 +39,47 @@ class Author extends Model
         $author = $query->fetch(PDO::FETCH_ASSOC);
         
         if ($author['api_key'] != '') {
-            return Auth::setLogin(self::select($author['id'],'id'));
+            return Auth::setLogin(self::selectById($author['id']));
         } else {
             return false;
         }
     }
     
-    public static function selectById($param = '')
+    public static function selectById($id = ''){
+        $query = Mysql::getInstance()->prepare('
+            SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
+            FROM author
+            WHERE id = :id
+            LIMIT 1
+        ');
+        $query->bindValue(':id', $id, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public static function selectByApikey($param = ''){
+        $query = Mysql::getInstance()->prepare('
+            SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
+            FROM author
+            WHERE api_key = :apikey
+            LIMIT 1
+        ');
+        $query->bindValue(':apikey', $param['apikey'], PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public static function selectByEmail($param = '')
     {
-         if ($type === 'id') {
-            $author = Mysql::getInstance()->prepare('
-                SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
-                FROM author
-                WHERE id = :id
-                LIMIT 1
-            ');
-            $author->bindValue(':id', $param, PDO::PARAM_INT);
-        } elseif ($type === 'email') {
-            $author = Mysql::getInstance()->prepare('
-                SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
-                FROM author
-                WHERE email = :email
-                LIMIT 1
-            ');
-            $author->bindValue(':param', $param['email'], PDO::PARAM_STR);
-        }
-//        } elseif ($type === 'apikey') {
-//            $author = Mysql::getInstance()->prepare('
-//                SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
-//                FROM author
-//                WHERE api_key = :apikey
-//                LIMIT 1
-//            ');
-//            $author->bindValue(':apikey', $param['apikey'], PDO::PARAM_STR);
-//        }
-        $result = $author->execute();
-        return $result;
+        $query = MySQL::getInstance()->prepare('
+            SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
+            FROM author
+            WHERE email = :email
+            LIMIT 1
+        ');
+        $query->bindValue(':email', $param, PDO::PARAM_STR);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
     
     public static function create($data = [])
@@ -107,11 +112,14 @@ class Author extends Model
     }
     
     public static function login($post) {
-        $user = self::select(Filtr::txt($_POST['email']),'email');
+//exit(Filtr::txt($_POST['email']));
+        $user = self::selectByEmail(Filtr::txt($_POST['email']));
 //exit('<pre>'.var_dump($user).'</pre>');
-        if ( is_array($user) && (Auth::hash(Filtr::pwd($_POST['password'])) === $user['pass_hash'])) {
-                Auth::setLogin($user);
-                Flight::redirect('/page/list');
+        if (empty($_POST)) {
+                Flight::redirect('/page/login');
+        } elseif(is_array($user) && (Auth::hash(Filtr::pwd($_POST['password'])) === $user['pass_hash'])) {
+            Auth::setLogin($user);
+            Flight::redirect('/page/list');
         } else {
             Flight::halt(401,'Error 401 Not authorized.');
             exit('Filtr::txt($_POST[\'email\']:'.Filtr::txt($_POST['email']).' $user[\'pass_hash\']:'.$user['pass_hash'].' Filtr::pwd($_POST[\'password\']:'.Filtr::pwd($_POST['password']));
