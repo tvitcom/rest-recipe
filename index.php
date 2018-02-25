@@ -31,12 +31,12 @@ Flight::route('GET|POST /iface_v01(/@entity(/@method))', function($entity, $meth
     $classname = ucfirst($entity);
     
     // load only entity classe;
-    $fpath_model = 'models/'.$classname.'.php';
-    if (file_exists($fpath_model) && isset($_GET['apikey']) && $_GET['apikey']!='') {
+    $fpath_model = 'models'.DS.$classname.'.php';
+    if (file_exists($fpath_model)) {
         require_once $fpath_model;
         if (method_exists($classname, $method)) {
-            $query_method = '$_'.$_SERVER['REQUEST_METHOD'];
-            if (Author::is_user($_REQUEST['apikey'])) {
+            $apikey_data = isset($_REQUEST['apikey'])?$_REQUEST['apikey']:'';
+            if (Author::is_user($apikey_data) || $method ==='create') {
                 $params = count($_GET)?$_GET:$_POST;
                 Flight::set('result', $classname::{$method}($params));
             } else {
