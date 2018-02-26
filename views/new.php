@@ -32,7 +32,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title></title>
+	<title>REST-Recipe</title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 
@@ -61,22 +61,22 @@
 				<section>
 					<h2>Fill here:</h2>
 					<p>
-                                        <form method="POST" enctype="" accept-charset="utf-8" action="/iface_v01/recipe/create" target="_self">
-                                          <fieldset>
-                                            <legend>Write your recipe here:</legend>
-                                            Recipe title:<br>
-                                            <input type="hidden" name="apikey" value="<?php echo isset($_SESSION['api_key'])?$_SESSION['api_key']:'none' ?>"><br>
-                                            <input type="text" name="title" required="on" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Zа-яА-Я-\.\s\S!?,\(\)]+$"><br>
-                                              Recipe (text):<br>
-                                              <textarea name="content" cols="40" rows="3" required="on" autocomplete="on"></textarea><br><br>
-                                              May be one photo? Download here:<br>
-                                              <input type="file" name="filename">
-                                              <br><p></p>
-                                              <input type="reset" value="Clear form">
-                                              <input type="submit" formenctype="multipart/form-data" value="Submit">
-                                          </fieldset>
-                                        </form> 
-                                        </p>
+                        <form method="POST" enctype="" accept-charset="utf-8" action="/iface_v01/recipe/create" target="_self">
+                          <fieldset>
+                            <legend>Write your recipe here:</legend>
+                            Recipe title:<br>
+                            <input type="hidden" name="apikey" value="<?php echo isset($_SESSION['api_key'])?$_SESSION['api_key']:'none' ?>"><br>
+                            <input type="text" name="title" required="on" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Zа-яА-Я-\.\s\S!?,\(\)]+$"><br>
+                              Recipe (text):<br>
+                              <textarea name="content" cols="40" rows="3" required="on" autocomplete="on"></textarea><br><br>
+                              May be one photo? Download here:<br>
+                              <input type="file" name="filename" accept="image/jpeg,image/png">
+                              <br><p></p>
+                              <input type="reset" value="Clear form">
+                              <input type="submit" formenctype="multipart/form-data" value="Submit">
+                          </fieldset>
+                        </form> 
+                    </p>
 				</section>
 				
 				<footer>

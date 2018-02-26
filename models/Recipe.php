@@ -84,8 +84,8 @@ class Recipe extends Model {
 
     public static function deleteOwn($id = 0)
     {
-        $query = Mysql::getInstance()->prepare("DELETE FROM recipe WHERE id = :id and recipe_id = :recipe_id");
-        $query->bindValue(':id', $id, PDO::PARAM_INT);
+        $query = Mysql::getInstance()->prepare("DELETE FROM recipe WHERE id = :id and author_id = :author_id");
+        $query->bindValue(':author_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $query->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
         $result = $query->execute();
         return $result;
@@ -102,7 +102,7 @@ class Recipe extends Model {
         $query->bindValue(':ts_create', time(), PDO::PARAM_INT);
         $query->bindValue(':title', Filtr::txt($data['title']), PDO::PARAM_STR);
         $query->bindValue(':content', Filtr::txt($data['content'],2048), PDO::PARAM_STR);
-        $query->bindValue(':picture_uri', md5(Filtr::pwd($data['filename'])), PDO::PARAM_INT);
+        $query->bindValue(':picture_uri', Files::uploadHandler(), PDO::PARAM_INT);
         $query->bindValue(':is_enable', 1, PDO::PARAM_INT);
 
         try
@@ -124,10 +124,38 @@ class Recipe extends Model {
         $recipe = Mysql::getInstance()->prepare('
             SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
             FROM recipe
-            WHERE author_id = :id AND is_enable = :is_enable
+            WHERE is_enable = :is_enable
+            ORDER BY ts_create DESC
             LIMIT :limit
         ');
-        $recipe->bindValue(':id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $recipe->bindValue(':is_enable', 1, PDO::PARAM_INT);
+        $recipe->bindValue(':limit', intval(Flight::get('limit_last_list')), PDO::PARAM_INT);
+        $recipe->execute();
+        return $recipe->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function selectById($id)
+    {
+        $recipe = Mysql::getInstance()->prepare('
+            SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
+            FROM recipe
+            WHERE author_id = :author_id AND is_enable = :is_enable
+            LIMIT :limit
+        ');
+        $recipe->bindValue(':id', $id, PDO::PARAM_INT);
+        $recipe->bindValue(':is_enable', 1, PDO::PARAM_INT);
+        $recipe->bindValue(':limit', intval(Flight::get('limit_last_list')), PDO::PARAM_INT);
+        $recipe->execute();
+        return $recipe->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function selectByAuthorId($params)
+    {
+        $recipe = Mysql::getInstance()->prepare('
+            SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
+            FROM recipe
+            WHERE author_id = :author_id AND is_enable = :is_enable
+            LIMIT :limit
+        ');
+        $recipe->bindValue(':author_id', $params, PDO::PARAM_INT);
         $recipe->bindValue(':is_enable', 1, PDO::PARAM_INT);
         $recipe->bindValue(':limit', intval(Flight::get('limit_last_list')), PDO::PARAM_INT);
         $recipe->execute();

@@ -33,6 +33,9 @@ if ($_SERVER['REMOTE_ADDR']==='127.0.0.1') {
     Flight::set('flight.handle_errors', false);
 }
 Flight::set('limit_last_list',5);
+Flight::set('uploaddir', './filestorage/');
+Flight::set('fs_uploaddir', '/var/www/recipe/webroot/filestorage/');
+Flight::set('allow_mimes', ['jpg','jpeg','png']);
 Flight::set('hash_salt','berRaWeliUD');
 Flight::set('flight.views.path','views');
 Flight::set('flight.views.extension','.php');

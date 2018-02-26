@@ -82,9 +82,8 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
 
                 if (isset($_FILES) && count($_FILES)) {
                     require_once 'helpers/Files.php';
-                    Files::uploadHandle();
                 }
-                
+//exit(var_dump($_FILES));
                 $params = count($_POST)?$_POST:"";
                 Flight::set('result', $classname::{$method}($params));
                 
