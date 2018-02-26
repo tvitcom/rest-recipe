@@ -18,8 +18,24 @@
  */
 class Files {
     public static function uploadHandler(){
-        if ($_FILES[''])
-        $newfilename = md5($oldfilename . Flight::get(hash_salt));
-        return $newfilename;
+        
+        if (is_array($_FILES["filename"])) {
+            $components = explode('.',basename($_FILES["filename"]["name"]));
+            $suffix = array_pop($components);
+            if (!in_array($suffix, Flight::get('allow_mimes'),true)){
+                Flight::set('error','File not uploaded: type file not allowed.');
+                return false;
+            } else {
+                $newfilename = md5($_FILES["filename"]["name"] . Flight::get('hash_salt').time()).'.'.$suffix;
+
+                if (move_uploaded_file($_FILES['filename']['tmp_name'], Flight::get('uploaddir').DS.$newfilename)) {
+                    chmod(Flight::get('fs_uploaddir').DS.$newfilename, 0600);
+                    return $newfilename;
+                }
+            }
+        }
+        Flight::set('error','File not uploaded.');
+        return false;
+    
     }
 }
