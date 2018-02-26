@@ -16,6 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
+
+/*
+ * This helper handle uploaded one file as secure manner without GD and ImageMagick libs.
+ * 
+ * ------Necessary settings (in Flightphp manner):-----
+ * Flight::set('uploaddir', './filestorage/');
+ * Flight::set('fs_uploaddir', '/var/www/recipe/webroot/filestorage/');
+ * Flight::set('allow_mimes', ['jpg','jpeg','png']);
+ * Flight::set('hash_salt','RAWSOMESALTIDS');
+ */
 class Files {
     public static function uploadHandler(){
         
@@ -34,8 +44,8 @@ class Files {
                 }
             }
         }
+        
         Flight::set('error','File not uploaded.');
         return false;
-    
     }
 }
