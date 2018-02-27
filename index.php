@@ -134,7 +134,7 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
 });
 
 // Work with frontends pages and forms.
-Flight::route('GET /@controller/@action', function($controller, $action){
+Flight::route('GET /@controller(/@action)', function($controller, $action){
 
     // load only file of entity class;
     $classname = ucfirst($controller);
@@ -150,6 +150,7 @@ Flight::route('GET /@controller/@action', function($controller, $action){
     // Register your class
     require_once $controller_file;
     Flight::register($controller, $classname);
+    $action = ($action !='')?$action:'listing';
     Flight::{$controller}()->{$action}();
 
     } else { 
@@ -158,11 +159,11 @@ Flight::route('GET /@controller/@action', function($controller, $action){
 });
 
 Flight::route('/', function(){
-    Flight::redirect('/page/list');
+    Flight::redirect('/page/listing');
 });
 
 Flight::route('/*', function(){
-    Flight::halt(404, '<h1 color="red">Error 404. Page not found!</h1>');
+    Flight::halt(404, '<h1><font color="red">Error 404. Page not found!</font></h1>');
 });
 
 //Flight::register('db', 'PDO', array('pgsql:host=localhost;port=5432;dbname=recipe','recipe','pass_to_recipe'),
