@@ -23,6 +23,10 @@ class Page {
         return;
     }
     public function listing() {
+        require_once Flight::get('webdir').DS.'models'.DS.'Recipe.php';
+        $data = Recipe::selectLast();
+        
+        
         Flight::render('listing', [
             'id'=>'',
             'author_id'=>'',

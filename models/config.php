@@ -22,19 +22,12 @@
  */
 
 defined('DS') or define('DS', '/');// Define directory separator sign.
+defined('DEV_ADDR') or define('DEV_ADDR', '127.0.0.1');// Define developers ip
 
-if ($_SERVER['REMOTE_ADDR']==='127.0.0.1') {
-    defined('WEB_DEBUG') or define('WEB_DEBUG', 'true');// Define directory separator sign.
-    Flight::set('flight.log_errors', true);
-    Flight::set('flight.handle_errors', true);
-} else {
-    defined('WEB_DEBUG') or define('WEB_DEBUG', 'false');// Define directory separator sign.
-    Flight::set('flight.log_errors', false);
-    Flight::set('flight.handle_errors', false);
-}
+Flight::set('webdir', '/var/www/recipe/webroot/');
+Flight::set('fs_uploaddir', '/var/www/recipe/webroot/filestorage/');
 Flight::set('limit_last_list',5);
 Flight::set('uploaddir', './filestorage/');
-Flight::set('fs_uploaddir', '/var/www/recipe/webroot/filestorage/');
 Flight::set('allow_mimes', ['jpg','jpeg','png']);
 Flight::set('actions_to_login', ['new','edit','delete']);
 Flight::set('hash_salt','berRaWeliUD');

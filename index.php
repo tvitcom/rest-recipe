@@ -24,6 +24,16 @@ require_once 'helpers/Filtr.php';
 require_once 'models/config.php';
 require_once 'models/Author.php';//because is as the user class and be always accessible.
 
+if ($_SERVER['REMOTE_ADDR']===DEV_ADDR) {
+    defined('WEB_DEBUG') or define('WEB_DEBUG', 'true');// Define directory separator sign.
+    Flight::set('flight.log_errors', true);
+    Flight::set('flight.handle_errors', true);
+} else {
+    defined('WEB_DEBUG') or define('WEB_DEBUG', 'false');// Define directory separator sign.
+    Flight::set('flight.log_errors', false);
+    Flight::set('flight.handle_errors', false);
+}
+
 // Work with REST Api - GET:
 Flight::route('GET /iface_v01(/@entity(/@method))', function($entity, $method){
     

@@ -120,7 +120,7 @@ class Recipe
         };
     }
 
-    public static function selectLast($params)
+    public static function selectLast($params='')
     {
         $recipe = Flight::db()->prepare('
             SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
