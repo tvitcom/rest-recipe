@@ -17,7 +17,7 @@
  * limitations under the License
  */
 
-class Author extends Model
+class Author
 {
     public function __construct() {
         return;
@@ -112,8 +112,7 @@ class Author extends Model
     }
     
     public static function login($post) {
-//exit(Filtr::txt($_POST['email']));
-//exit('<pre>'.var_dump($user).'</pre>');
+
         if (empty($_POST) && !Auth::isLogged()) {
                 Flight::redirect('/page/login');
         }

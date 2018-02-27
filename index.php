@@ -22,7 +22,6 @@ require 'vendor/autoload.php';
 require_once 'helpers/Auth.php';
 require_once 'helpers/Filtr.php';
 require_once 'models/config.php';
-require_once 'models/model.php';
 require_once 'models/Author.php';//because is as the user class and be always accessible.
 
 // Work with REST Api - GET:
