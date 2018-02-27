@@ -16,19 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
+class Controller {
+    public function __construct($param) {
+        return;
+    }
+    
+    public static function loadfile($filename = '', $dir = 'models') {
+        $filepath = Flight::get('webdir') . DS . $dir . DS . $filename . '.php';
+        if (!file_exists($filepath)){
+            Flight::halt(404, '<h1 color="red">Error 404. Page not found!</h1>');
+            exit();
+        }
 
-/*
- * Here set any settings and variables for web application.
- */
-
-defined('DS') or define('DS', '/');// Define directory separator sign.
-defined('DEV_ADDR') or define('DEV_ADDR', '127.0.0.1');// Define developers ip
-
-Flight::set('webdir', '/var/www/recipe/webroot/');
-Flight::set('fs_uploaddir', '/var/www/recipe/webroot/filestorage/');
-Flight::set('limit_last_list',5);
-Flight::set('uploaddir', './filestorage/');
-Flight::set('allow_mimes', ['jpg','jpeg','png']);
-Flight::set('actions_to_login', ['new','edit','delete']);
-Flight::set('hash_salt','berRaWeliUD');
-Flight::set('flight.views.extension','.php');
+        require_once $filepath;
+        return true;
+    }
+}

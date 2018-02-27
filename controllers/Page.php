@@ -17,23 +17,18 @@
  * limitations under the License
  */
 
-class Page {
+class Page extends Controller {
     
     public function __construct() {
-        return;
+        Flight::set('flight.views.path','views' . DS . lcfirst(__CLASS__));
     }
+    
     public function listing() {
-        require_once Flight::get('webdir').DS.'models'.DS.'Recipe.php';
-        $data = Recipe::selectLast();
-        
-        
+        self::loadfile('Recipe','models');
         Flight::render('listing', [
-            'id'=>'',
-            'author_id'=>'',
-            'title' => ucfirst('listing'),
-            'content'=>'',
-            'date'=>'',
-            'name'=>'',
+            'data'=>Recipe::selectLast(),
+            'sort'=>'',
+            'title' => ucfirst(__METHOD__),
             ]);
     }
     
@@ -41,7 +36,7 @@ class Page {
         Flight::render('read', [
             'id'=>'',
             'author_id'=>'',
-            'title' => ucfirst('read'),
+            'title' => ucfirst(__METHOD__),
             'content'=>'',
             'date'=>'',
             'name'=>'',
@@ -52,7 +47,7 @@ class Page {
         Flight::render('add', [
             'id'=>'',
             'author_id'=>'',
-            'title' => ucfirst('add'),
+            'title' => ucfirst(__METHOD__),
             'content'=>'',
             'date'=>'',
             'name'=>'',
@@ -63,7 +58,7 @@ class Page {
         Flight::render('edit', [
             'id'=>'',
             'author_id'=>'',
-            'title' => ucfirst('edit'),
+            'title' => ucfirst(__METHOD__),
             'content'=>'',
             'date'=>'',
             'name'=>'',
@@ -74,7 +69,7 @@ class Page {
         Flight::render('delete', [
             'id'=>'',
             'author_id'=>'',
-            'title' => ucfirst('delete'),
+            'title' => ucfirst(__METHOD__),
             'content'=>'',
             'date'=>'',
             'name'=>'',
@@ -85,7 +80,7 @@ class Page {
                 Flight::render('register', [
             'id'=>'',
             'author_id'=>'',
-            'title' => ucfirst('register'),
+            'title' => ucfirst(__METHOD__),
             'content'=>'',
             'date'=>'',
             'name'=>'',
@@ -96,7 +91,7 @@ class Page {
         Flight::render('login', [
             'id'=>'',
             'author_id'=>'',
-            'title' => ucfirst('login'),
+            'title' => ucfirst(__METHOD__),
             'content'=>'',
             'date'=>'',
             'name'=>'',
@@ -108,7 +103,7 @@ class Page {
         Flight::render('error404', [
             'id'=>'',
             'author_id'=>'',
-            'title' => ucfirst('error404'),
+            'title' => ucfirst(__METHOD__),
             'content'=>'',
             'date'=>'',
             'name'=>'',
