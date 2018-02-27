@@ -29,10 +29,16 @@ require_once 'models/Author.php';//because is as the user class and be always ac
 
 // Work with REST Api - GET:
 Flight::route('GET /iface_v01(/@entity(/@method))', function($entity, $method){
-    require_once 'models/model_loader.php';
+    
+// load only file of entity class;
+    $classname = ucfirst($entity);
+    $fpath_model = 'models'.DS.$classname.'.php';
+    
     if (file_exists($fpath_model)) {
         require_once $fpath_model;
         if (method_exists($classname, $method)) {
+            
+            //Authorisation and authebtication:
             $apikey_data = isset($_REQUEST['apikey'])?$_REQUEST['apikey']:'';
             if (Author::is_user($apikey_data) 
                 || ($entity ==='person' && $method ==='create') 
@@ -71,10 +77,17 @@ Flight::route('GET /iface_v01(/@entity(/@method))', function($entity, $method){
 
 //Work with REST Api - POST:
 Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
-    require_once 'models/model_loader.php';
+    
+    // load only file of entity class;
+    $classname = ucfirst($entity);
+    $fpath_model = 'models'.DS.$classname.'.php';
+    
     if (file_exists($fpath_model)) {
         require_once $fpath_model;
+        
         if (method_exists($classname, $method)) {
+            
+            //Authorisation and authebtication:
             $apikey_data = isset($_REQUEST['apikey'])?$_REQUEST['apikey']:'';
             if (Author::is_user($apikey_data) 
                 || ($entity ==='person' && $method ==='create') 
@@ -83,7 +96,6 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
                 if (isset($_FILES) && count($_FILES)) {
                     require_once 'helpers/Files.php';
                 }
-//exit(var_dump($_FILES));
                 $params = count($_POST)?$_POST:"";
                 Flight::set('result', $classname::{$method}($params));
                 
@@ -114,23 +126,30 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
 });
 
 // Work with frontends pages and forms.
-Flight::route('GET /page(/@name)', function($name){
-    // load only stored files;
-    $pagename = Flight::get('flight.views.path').DS.$name.Flight::get('flight.views.extension');
-    //exit($pagename);
-    if ($name === 'new' && !Auth::isLogged())
-        Flight::redirect('/page/login');
-        
+Flight::route('GET /@controller(/@action)', function($controller, $action){
+
+    // load only file of entity class;
+    $classname = ucfirst($controller);
+    $fpath_model = 'controllers'.DS.$classname.'.php';
     
+   // load only stored files;
+    $pagename = Flight::get('flight.views.path').DS.$action.Flight::get('flight.views.extension');
+    //exit($pagename);
+    if ($action === 'new' && !Auth::isLogged())
+        Flight::redirect('/page/login');
+            
     if (file_exists($pagename)) {
-        Flight::render($name, [
-            'title' => ucfirst($name),
+        
+        Flight::render($action, [
+            'id'=>'',
+            'author_id'=>'',
+            'title' => ucfirst($action),
             'content'=>'',
             'date'=>'',
             'name'=>'',
             ]);
     } else { 
-        Flight::halt(404, 'Error 404. Page not found!');
+        Flight::redirect('/page/404');
     }
 });
 
@@ -138,8 +157,14 @@ Flight::route('/', function(){
     Flight::redirect('/page/list');
 });
 
+//Prepare Not found page:
+Flight::map('notFound', function(){
+    Flight::redirect('/page/404');
+});
+
 Flight::route('/*', function(){
     Flight::halt(404, 'Error 404. Page not found!');
 });
+
 
 Flight::start();

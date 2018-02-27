@@ -13,7 +13,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title></title>
+	<title>Error 404 Page not found</title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 
@@ -31,13 +31,19 @@
 			
 			<article>
 				<header>
-					<h1><?=$title?> recipes</h1>
-					<p>You can see last five recipes.</p>
+					<h1 color="red">Error 404. Page not found.</h1>
+                    <p>We apologise, but you can see other links done.</p>
 				</header>
 				<section>
-					<h2><?=$title?></h2>
-					<p><?=$content?></p>
-                                        <p><?=$date?> . <?php echo (isset($_SESSION['user_id']) && $_SESSION['user_id']==$author_id)?'<a href=/page/recipeedit?id='.$id.'>Edit</a>':'<a href=/page/read?id='.$id.'>Read more</a>';?>
+					<h2>Related links:</h2>
+                    <p>
+                    <ul>
+                        <li><a href="/page/list">List recipes</a></li>
+                        <li><a href="/page/new">Add recipe</a></li>
+                        <li><a href="/page/register">Register</a></li>
+                        <li><a href="/page/login">Login</a></li>
+                    </ul>
+                    </p>
 				</section>
 				<!--section>
 					<h2>article section h2</h2>
@@ -54,7 +60,6 @@
 		</div> <!-- #main -->
 	</div> <!-- #main-container -->
 <?php require 'main_footer.php'?>
-	
 
 </body>
 </html>

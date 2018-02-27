@@ -40,7 +40,7 @@ class Recipe extends Model {
      */
     public static function is_own($own_id)
     {
-        $query = Mysql::getInstance()->prepare('
+        $query = self::$db->prepare('
             SELECT id, email, pass_hash, api_key, ts_create, ts_update, recover_key
             FROM recipe
             WHERE id = :id limit 1
@@ -100,7 +100,7 @@ class Recipe extends Model {
         //$query->bindValue(':id', '', PDO::PARAM_STR);
         $query->bindValue(':author_id', $_SESSION['user_id'], PDO::PARAM_STR);
         $query->bindValue(':ts_create', time(), PDO::PARAM_INT);
-        $query->bindValue(':title', Filtr::txt($data['title']), PDO::PARAM_STR);
+        $query->bindValue(':title', Filtr::txt($data['title'],55), PDO::PARAM_STR);
         $query->bindValue(':content', Filtr::txt($data['content'],2048), PDO::PARAM_STR);
         $query->bindValue(':picture_uri', Files::uploadHandler(), PDO::PARAM_INT);
         $query->bindValue(':is_enable', 1, PDO::PARAM_INT);
