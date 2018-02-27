@@ -50,26 +50,22 @@
 			<article>
 				<header>
 					<h1><?=$title?> recipe</h1>
-                    <?php if (Auth::isLogged()) { ?>
-                    <pre>Yuo API_KEY: <?php echo isset($_SESSION['api_key'])?$_SESSION['api_key']:'none' ?></pre>
-                    <?php } else {?>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. .</p>
-                    <?php } ?>
-					
-					
 				</header>
 				<section>
 					<h2>Fill here:</h2>
 					<p>
                         <form method="POST" enctype="" accept-charset="utf-8" action="/iface_v01/recipe/create" target="_self">
+                          <input type="hidden" name="apikey" value="<?php echo isset($_SESSION['api_key'])?$_SESSION['api_key']:'none' ?>"><br>
                           <fieldset>
                             <legend>Write your recipe here:</legend>
                             Recipe title:<br>
-                            <input type="hidden" name="apikey" value="<?php echo isset($_SESSION['api_key'])?$_SESSION['api_key']:'none' ?>"><br>
-                            <input type="text" name="title" required="on" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Zа-яА-Я-\.\s\S!?,\(\)]+$"><br>
+                            <input type="text" name="title" required="on" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Zа-яА-Я-\.\s\S!?,\(\)]+$" value="<?=$data['title']?>"><br>
                               Recipe (text):<br>
-                              <textarea name="content" cols="40" rows="3" required="on" autocomplete="on"></textarea><br><br>
+                              <textarea name="content" cols="40" rows="3" required="on" autocomplete="on"><?=$data['content']?></textarea><br><br>
                               May be one photo? Download here:<br>
+                              <img src="/filestorage/<?=$data['picture_uri']?>" 
+                                   alt="May be this is absent picture..." width="400" height="341"><br>
                               <input type="file" name="filename" accept="image/jpeg,image/png">
                               <br><p></p>
                               <input type="reset" value="Clear form">
