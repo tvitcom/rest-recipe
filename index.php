@@ -19,10 +19,11 @@
 $mem_start = memory_get_usage();
 require 'vendor/autoload.php';
 
-require_once 'helpers/Auth.php';
-require_once 'helpers/Filtr.php';
-require_once 'models/config.php';
+require_once 'models/config.php';//Configuration file.
+require_once 'helpers/Auth.php'; //some helpers.
+require_once 'helpers/Filtr.php';//yet.
 require_once 'models/Author.php';//because is as the user class and be always accessible.
+require_once 'controllers/Controller.php';//connnect parent controller.
 
 if ($_SERVER['REMOTE_ADDR']===DEV_ADDR) {
     defined('WEB_DEBUG') or define('WEB_DEBUG', 'true');// Define directory separator sign.
@@ -39,7 +40,7 @@ Flight::route('GET /iface_v01(/@entity(/@method))', function($entity, $method){
     
 // load only file of entity class;
     $classname = ucfirst($entity);
-    $fpath_model = 'models'.DS.$classname.'.php';
+    $fpath_model = 'models' . DS . $classname . '.php';
     
     if (file_exists($fpath_model)) {
         require_once $fpath_model;
@@ -87,7 +88,7 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
     
     // load only file of entity class;
     $classname = ucfirst($entity);
-    $fpath_model = 'models'.DS.$classname.'.php';
+    $fpath_model = 'models' . DS . $classname.'.php';
     
     if (file_exists($fpath_model)) {
         require_once $fpath_model;
@@ -137,21 +138,19 @@ Flight::route('GET /@controller/@action', function($controller, $action){
 
     // load only file of entity class;
     $classname = ucfirst($controller);
-    $controller_file = 'controllers'.DS.$classname.'.php';
+    $controller_file = 'controllers' . DS . $classname . '.php';
     
-   // load only stored files;
-    $view_file = Flight::get('flight.views.path').DS.$action.Flight::get('flight.views.extension');
     
     //Authentication and authorisation if:
     if (in_array($action, Flight::get('actions_to_login')) && !Auth::isLogged())
         Flight::redirect('/page/login');
             
-    if (file_exists($controller_file) and file_exists($view_file)) {
+    if (file_exists($controller_file)) {
         
     // Register your class
     require_once $controller_file;
     Flight::register($controller, $classname);
-    Flight::page()->{$action}();
+    Flight::{$controller}()->{$action}();
 
     } else { 
         Flight::redirect('/page/error404');
@@ -174,4 +173,4 @@ Flight::register('db', 'PDO', array('mysql:host=localhost;port=3306;dbname=recip
 );
 
 Flight::start();
-echo memory_get_usage() - $mem_start.'bytes get used.';
+echo 'Memory:' . memory_get_usage() - $mem_start . '(bytes) get used.';
