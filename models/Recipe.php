@@ -139,7 +139,7 @@ class Recipe
         $recipe = Flight::db()->prepare('
             SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
             FROM recipe
-            WHERE author_id = :author_id AND is_enable = :is_enable
+            WHERE id = :id AND is_enable = :is_enable
             LIMIT :limit
         ');
         $recipe->bindValue(':id', $id, PDO::PARAM_INT);
