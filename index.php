@@ -22,8 +22,6 @@ require 'vendor/autoload.php';
 require_once 'helpers/Auth.php';
 require_once 'helpers/Filtr.php';
 require_once 'models/config.php';
-//require_once 'models/pgsql.php';
-require_once 'models/mysql.php';
 require_once 'models/model.php';
 require_once 'models/Author.php';//because is as the user class and be always accessible.
 
@@ -157,14 +155,16 @@ Flight::route('/', function(){
     Flight::redirect('/page/list');
 });
 
-//Prepare Not found page:
-Flight::map('notFound', function(){
-    Flight::redirect('/page/404');
-});
-
 Flight::route('/*', function(){
-    Flight::halt(404, 'Error 404. Page not found!');
+    Flight::halt(404, '<h1 color="red">Error 404. Page not found!</h1>');
 });
 
+// The callback will be passed the object that was constructed
+//Flight::register('db', 'PDO', array('pgsql:host=localhost;port=5432;dbname=recipe','recipe','pass_to_recipe'),
+Flight::register('db', 'PDO', array('mysql:host=localhost;port=3306;dbname=recipe','recipe','pass_to_recipe'),
+  function($db){
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  }
+);
 
 Flight::start();
