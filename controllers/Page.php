@@ -19,4 +19,95 @@
 
 class Page {
     
+    public function __construct() {
+        return;
+    }
+    public function listing() {
+        Flight::render('listing', [
+            'id'=>'',
+            'author_id'=>'',
+            'title' => ucfirst('listing'),
+            'content'=>'',
+            'date'=>'',
+            'name'=>'',
+            ]);
+    }
+    
+    public function read() {
+        Flight::render('read', [
+            'id'=>'',
+            'author_id'=>'',
+            'title' => ucfirst('read'),
+            'content'=>'',
+            'date'=>'',
+            'name'=>'',
+            ]);
+    }
+    
+    public function add() {
+        Flight::render('add', [
+            'id'=>'',
+            'author_id'=>'',
+            'title' => ucfirst('add'),
+            'content'=>'',
+            'date'=>'',
+            'name'=>'',
+            ]);
+    }
+    
+    public function edit() {
+        Flight::render('edit', [
+            'id'=>'',
+            'author_id'=>'',
+            'title' => ucfirst('edit'),
+            'content'=>'',
+            'date'=>'',
+            'name'=>'',
+            ]);
+    }
+    
+    public function delete() {
+        Flight::render('delete', [
+            'id'=>'',
+            'author_id'=>'',
+            'title' => ucfirst('delete'),
+            'content'=>'',
+            'date'=>'',
+            'name'=>'',
+            ]);
+    }
+    
+    public function register() {
+                Flight::render('register', [
+            'id'=>'',
+            'author_id'=>'',
+            'title' => ucfirst('register'),
+            'content'=>'',
+            'date'=>'',
+            'name'=>'',
+            ]);
+    }
+    
+    public function login() {
+        Flight::render('login', [
+            'id'=>'',
+            'author_id'=>'',
+            'title' => ucfirst('login'),
+            'content'=>'',
+            'date'=>'',
+            'name'=>'',
+            ]);
+    }
+    
+        
+    public function error404() {
+        Flight::render('error404', [
+            'id'=>'',
+            'author_id'=>'',
+            'title' => ucfirst('error404'),
+            'content'=>'',
+            'date'=>'',
+            'name'=>'',
+            ]);
+    }
 }

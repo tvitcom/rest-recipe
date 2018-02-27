@@ -38,8 +38,8 @@
 					<h2>Related links:</h2>
                     <p>
                     <ul>
-                        <li><a href="/page/list">List recipes</a></li>
-                        <li><a href="/page/new">Add recipe</a></li>
+                        <li><a href="/page/listing">List recipes</a></li>
+                        <li><a href="/page/add">Add recipe</a></li>
                         <li><a href="/page/register">Register</a></li>
                         <li><a href="/page/login">Login</a></li>
                     </ul>

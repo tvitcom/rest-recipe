@@ -22,8 +22,8 @@
 			<h1 id="title">Rest-Recipe</h1>
 			<nav>
 				<ul>
-					<li><a href="/page/list">List</a></li>
-                    <li><a class="active" href="/page/new">Add Recipe</a></li>
+					<li><a href="/page/listing">List</a></li>
+                    <li><a class="active" href="/page/add">Add Recipe</a></li>
                     <?php if (Auth::isLogged()) { ?>
 					<li><a href="/iface_v01/author/logout">Logout</a></li>
                     <?php } else { ?>
