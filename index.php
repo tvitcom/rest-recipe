@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-
+$mem_start = memory_get_usage();
 require 'vendor/autoload.php';
 
 require_once 'helpers/Auth.php';
@@ -137,17 +137,14 @@ Flight::route('GET /@controller/@action', function($controller, $action){
         Flight::redirect('/page/login');
             
     if (file_exists($controller_file) and file_exists($view_file)) {
-        //Flight::{$action}();
-        Flight::render($action, [
-            'id'=>'',
-            'author_id'=>'',
-            'title' => ucfirst($action),
-            'content'=>'',
-            'date'=>'',
-            'name'=>'',
-            ]);
+        
+    // Register your class
+    require_once $controller_file;
+    Flight::register($controller, $classname);
+    Flight::page()->{$action}();
+
     } else { 
-        Flight::redirect('/page/404');
+        Flight::redirect('/page/error404');
     }
 });
 
@@ -167,3 +164,4 @@ Flight::register('db', 'PDO', array('mysql:host=localhost;port=3306;dbname=recip
 );
 
 Flight::start();
+echo memory_get_usage() - $mem_start.'bytes get used.';
