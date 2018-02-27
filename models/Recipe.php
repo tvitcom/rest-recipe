@@ -28,7 +28,8 @@
 /iface_v01/   [POST]  recipe/updateOwn
 /iface_v01/   [POST]  recipe/deleteOwn
  */
-class Recipe extends Model {
+class Recipe 
+{
     
     public function __construct() {
         return;
