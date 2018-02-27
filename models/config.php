@@ -36,6 +36,7 @@ Flight::set('limit_last_list',5);
 Flight::set('uploaddir', './filestorage/');
 Flight::set('fs_uploaddir', '/var/www/recipe/webroot/filestorage/');
 Flight::set('allow_mimes', ['jpg','jpeg','png']);
+Flight::set('actions_to_login', ['new','edit','delete']);
 Flight::set('hash_salt','berRaWeliUD');
 Flight::set('flight.views.path','views');
 Flight::set('flight.views.extension','.php');

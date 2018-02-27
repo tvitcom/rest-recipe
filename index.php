@@ -123,20 +123,21 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
 });
 
 // Work with frontends pages and forms.
-Flight::route('GET /@controller(/@action)', function($controller, $action){
+Flight::route('GET /@controller/@action', function($controller, $action){
 
     // load only file of entity class;
     $classname = ucfirst($controller);
-    $fpath_model = 'controllers'.DS.$classname.'.php';
+    $controller_file = 'controllers'.DS.$classname.'.php';
     
    // load only stored files;
-    $pagename = Flight::get('flight.views.path').DS.$action.Flight::get('flight.views.extension');
-    //exit($pagename);
-    if ($action === 'new' && !Auth::isLogged())
+    $view_file = Flight::get('flight.views.path').DS.$action.Flight::get('flight.views.extension');
+    
+    //Authentication and authorisation if:
+    if (in_array($action, Flight::get('actions_to_login')) && !Auth::isLogged())
         Flight::redirect('/page/login');
             
-    if (file_exists($pagename)) {
-        
+    if (file_exists($controller_file) and file_exists($view_file)) {
+        //Flight::{$action}();
         Flight::render($action, [
             'id'=>'',
             'author_id'=>'',
@@ -158,7 +159,6 @@ Flight::route('/*', function(){
     Flight::halt(404, '<h1 color="red">Error 404. Page not found!</h1>');
 });
 
-// The callback will be passed the object that was constructed
 //Flight::register('db', 'PDO', array('pgsql:host=localhost;port=5432;dbname=recipe','recipe','pass_to_recipe'),
 Flight::register('db', 'PDO', array('mysql:host=localhost;port=3306;dbname=recipe','recipe','pass_to_recipe'),
   function($db){
