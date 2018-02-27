@@ -66,15 +66,18 @@ class Page extends Controller {
             ]);
     }
     
-    public function delete() {
-        Flight::render('delete', [
-            'id'=>'',
-            'author_id'=>'',
+    public function deleteOwn() {
+        $id = isset($_GET['id'])?intval($_GET['id']):0;
+        if (isset($_GET['id'])) {
+           Flight::render('delete', [
+            'data'=> Recipe::selectById($id)[0],
             'title' => ucfirst(explode('::',__METHOD__)[1]),
-            'content'=>'',
-            'date'=>'',
-            'name'=>'',
-            ]);
+            ]); 
+        } elseif (isset($_POST['affirmation']) && $_POST['affirmation']==='yes' && Recipe::deleteById($id)[0]) {
+            Flight::redirect('/page/listing');
+        } else { 
+            Flight::redirect('/page/listing');
+        }
     }
     
     public function register() {
