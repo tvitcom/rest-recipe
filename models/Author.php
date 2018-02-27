@@ -29,7 +29,7 @@ class Author extends Model
      */
     public static function is_user($apikey = '')
     {
-        $query = Mysql::getInstance()->prepare('
+        $query = Flight::db()->prepare('
             SELECT id, email, pass_hash, api_key, ts_create, ts_update, recover_key
             FROM author
             WHERE api_key = :api_key limit 1
@@ -46,7 +46,7 @@ class Author extends Model
     }
     
     public static function selectById($id = ''){
-        $query = Mysql::getInstance()->prepare('
+        $query = Flight::db()->prepare('
             SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
             FROM author
             WHERE id = :id
@@ -58,7 +58,7 @@ class Author extends Model
     }
     
     public static function selectByApikey($param = ''){
-        $query = Mysql::getInstance()->prepare('
+        $query = Flight::db()->prepare('
             SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
             FROM author
             WHERE api_key = :apikey
@@ -71,7 +71,7 @@ class Author extends Model
     
     public static function selectByEmail($param = '')
     {
-        $query = MySQL::getInstance()->prepare('
+        $query = Flight::db()->prepare('
             SELECT id, name, email, pass_hash, api_key, ts_create, ts_update, recover_key
             FROM author
             WHERE email = :email
@@ -84,7 +84,7 @@ class Author extends Model
     
     public static function create($data = [])
     {
-        $query = Mysql::getInstance()->prepare("
+        $query = Flight::db()->prepare("
             INSERT INTO author (name, email, pass_hash, api_key, ts_create, ts_update, recover_key)
             VALUES (:name, :email, :pass_hash, :api_key, :ts_create, :ts_update, :recover_key)
         ");
@@ -101,7 +101,7 @@ class Author extends Model
         {
             $query->execute();
             //return $query->lastInsertId('seq_author_id_integer');
-            return Mysql::getInstance()->lastInsertId();
+            return Flight::db()->lastInsertId();
         }
         catch (PDOException $e)
         {

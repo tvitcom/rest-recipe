@@ -21,7 +21,7 @@
     <footer class="wrapper">
         <h3>tvitcom@github.com @ All right reserved. <?=date('Y')?></h3>
         <?php 
-        if (WEB_DEBUG) {
+        if (WEB_DEBUG && 0) {
             echo '<pre>';
             
             echo '1) Hash: '. Auth::hash('test123').'<br>';

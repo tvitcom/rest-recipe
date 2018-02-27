@@ -70,7 +70,7 @@ class Recipe extends Model {
                 is_enable=:is_enable,
             WHERE id = :id and aothor_id = :author_id
             ";
-        $query = Mysql::getInstance()->prepare($query);
+        $query = Flight::db()->prepare($query);
         $query->bindValue(':id', $data['id'], PDO::PARAM_STR);
         $query->bindValue(':author_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $query->bindValue(':ts_create', time(), PDO::PARAM_INT);
@@ -79,12 +79,12 @@ class Recipe extends Model {
         $query->bindValue(':picture_uri', $data['picture_uri'], PDO::PARAM_STR);
         $query->bindValue(':is_enable', 1, PDO::PARAM_INT);
         $query->execute();
-        return Mysql::getInstance()->lastInsertId();
+        return Flight::db()->lastInsertId();
     }
 
     public static function deleteOwn($id = 0)
     {
-        $query = Mysql::getInstance()->prepare("DELETE FROM recipe WHERE id = :id and author_id = :author_id");
+        $query = Flight::db()->prepare("DELETE FROM recipe WHERE id = :id and author_id = :author_id");
         $query->bindValue(':author_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $query->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
         $result = $query->execute();
@@ -93,7 +93,7 @@ class Recipe extends Model {
 
     public static function create($data)
     {
-        $query = Mysql::getInstance()->prepare("
+        $query = Flight::db()->prepare("
             INSERT INTO recipe (author_id, ts_create, title, content, picture_uri, is_enable)
             VALUES (:author_id, :ts_create, :title, :content, :picture_uri, :is_enable)
         ");
@@ -109,7 +109,7 @@ class Recipe extends Model {
         {
             $query->execute();
             //return $query->lastInsertId('seq_recipe_id_integer');
-            return Mysql::getInstance()->lastInsertId();
+            return Flight::db()->lastInsertId();
         }
         catch (PDOException $e)
         {
@@ -121,7 +121,7 @@ class Recipe extends Model {
 
     public static function selectLast($params)
     {
-        $recipe = Mysql::getInstance()->prepare('
+        $recipe = Flight::db()->prepare('
             SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
             FROM recipe
             WHERE is_enable = :is_enable
@@ -135,7 +135,7 @@ class Recipe extends Model {
     }
     public static function selectById($id)
     {
-        $recipe = Mysql::getInstance()->prepare('
+        $recipe = Flight::db()->prepare('
             SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
             FROM recipe
             WHERE author_id = :author_id AND is_enable = :is_enable
@@ -149,7 +149,7 @@ class Recipe extends Model {
     }
     public static function selectByAuthorId($params)
     {
-        $recipe = Mysql::getInstance()->prepare('
+        $recipe = Flight::db()->prepare('
             SELECT id, author_id, ts_create, title, content, picture_uri, is_enable
             FROM recipe
             WHERE author_id = :author_id AND is_enable = :is_enable
