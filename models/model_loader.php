@@ -17,6 +17,3 @@
  * limitations under the License
  */
 
-// load only file of entity class;
-$classname = ucfirst($entity);
-$fpath_model = 'models'.DS.$classname.'.php';

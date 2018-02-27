@@ -16,20 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-?>
-	<div id="header-container">
-		<header class="wrapper clearfix">
-			<h1 id="title">Rest-Recipe</h1>
-			<nav>
-				<ul>
-					<li><a href="/page/list">List</a></li>
-                    <li><a class="active" href="/page/new">Add Recipe</a></li>
-                    <?php if (Auth::isLogged()) { ?>
-					<li><a href="/iface_v01/author/logout">Logout</a></li>
-                    <?php } else { ?>
-                    <li><a href="/page/login">Login</a></li>
-                    <?php } ?>
-				</ul>
-			</nav>
-		</header>
-	</div>
+
+class Iface_v01 {
+    
+    //Load necesary models:
+    public function __construct(){
+
+    }
+}
