@@ -85,12 +85,12 @@ class Recipe
         return $query->rowCount();
     }
 
-    public static function deleteOwn($id = 0)
+    public static function deleteOwn($params)
     {
         $own_id = isset($_SESSION['user_id'])?$_SESSION['user_id']:Author::selectByApikey($_POST['apikey'])['id'];
         $query = Flight::db()->prepare("DELETE FROM recipe WHERE id = :id and author_id = :author_id");
         $query->bindValue(':author_id', $own_id, PDO::PARAM_INT);
-        $query->bindValue(':id', $id, PDO::PARAM_INT);
+        $query->bindValue(':id', $params['id'], PDO::PARAM_INT);
         $result = $query->execute();
         return $query->rowCount();
     }
