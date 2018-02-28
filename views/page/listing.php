@@ -41,7 +41,7 @@
                                         <p><?=$val['ts_create']?> . <?php 
                                         echo (isset($_SESSION['user_id']) && $_SESSION['user_id']==$val['author_id'])
                                         ?'<a href=/page/edit?id='.$val['id'].'>Edit</a>'
-                                        :'<a href=/page/read?id='.$val['$id'].'>Read more</a>';
+                                        :'<a href=/page/read?id='.$val['id'].'>Read more</a>';
                                         ?>
 				</section>
                 <?php } ?>
