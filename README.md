@@ -9,7 +9,9 @@ https://recipe/iface_v01/author/select?apikey=96cae35ce8a9b0244178bf28e4966c2ce1
 ```
 and recieve the json responce:
 ```
-{"context":"\/iface_v01\/author\/select?apikey=96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","result":{"id":"1","name":"tester","email":"test1@test.test","pass_hash":"HxqWlNprnK0WzV9VmNmk97RGyXjlHbNg3eHdBvPq6R","api_key":"96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","ts_create":"1519480215","ts_update":"1519480215","recover_key":""},"error":null}
+{"context":"\/iface_v01\/author\/select?apikey=96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","result":
+{"id":"1","name":"tester","email":"test1@test.test","pass_hash":"HxqWlNprnK0WzV9VmNmk97RGyXjlHbNg3eHdBvPq6R","api_key":"96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","ts_create":"1519480215","ts_update":"1519480215","recover_key":""}
+,"error":null}
 ```
 Example #2 send GET with:
 ```
@@ -17,7 +19,13 @@ https://recipe/iface_v01/recipe/selectLast?apikey=96cae35ce8a9b0244178bf28e4966c
 ```
 and will get responce:
 ```
-{"context":"\/iface_v01\/recipe\/selectLast?apikey=96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","result":[{"id":"6","author_id":"1","ts_create":"2018-02-27 05:22:55","title":"Special bsod recipe6","content":"Add some picture and voila","picture_uri":"a2657576604f8a70dfaf990ece77dcd3.png","is_enable":"1"},{"id":"1","author_id":"1","ts_create":"2018-02-27 05:22:42","title":"Test title1","content":"Best of the best recipe in the world!!!","picture_uri":"123.jpg","is_enable":"1"},{"id":"4","author_id":"1","ts_create":"2018-02-26 12:13:36","title":"Some recipe4","content":"Some some text in recipe4","picture_uri":"8a296e96b19ebf244fd3440b37569b991.jpg","is_enable":"1"},{"id":"5","author_id":"1","ts_create":"0000-00-00 00:00:00","title":"Some recipe5","content":"Text about 5 recipes.","picture_uri":"0","is_enable":"1"},{"id":"7","author_id":"1","ts_create":"0000-00-00 00:00:00","title":"Some title3","content":"Some text3","picture_uri":"0","is_enable":"1"}],"error":null}
+{"context":"\/iface_v01\/recipe\/selectLast?apikey=96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","result":
+[{"id":"6","author_id":"1","ts_create":"2018-02-27 05:22:55","title":"Special bsod recipe6","content":"Add some picture and voila","picture_uri":"a2657576604f8a70dfaf990ece77dcd3.png","is_enable":"1"},
+{"id":"1","author_id":"1","ts_create":"2018-02-27 05:22:42","title":"Test title1","content":"Best of the best recipe in the world!!!","picture_uri":"123.jpg","is_enable":"1"},
+{"id":"4","author_id":"1","ts_create":"2018-02-26 12:13:36","title":"Some recipe4","content":"Some some text in recipe4","picture_uri":"8a296e96b19ebf244fd3440b37569b991.jpg","is_enable":"1"},
+{"id":"5","author_id":"1","ts_create":"0000-00-00 00:00:00","title":"Some recipe5","content":"Text about 5 recipes.","picture_uri":"0","is_enable":"1"},
+{"id":"7","author_id":"1","ts_create":"0000-00-00 00:00:00","title":"Some title3","content":"Some text3","picture_uri":"0","is_enable":"1"}
+],"error":null}
 ```
 Example #3 we can send POST request with valid api_key:
 ```
