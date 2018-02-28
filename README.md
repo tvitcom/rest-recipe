@@ -11,13 +11,39 @@ and recieve the json responce:
 ```
 {"context":"\/iface_v01\/author\/select?apikey=96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","result":{"id":"1","name":"tester","email":"test1@test.test","pass_hash":"HxqWlNprnK0WzV9VmNmk97RGyXjlHbNg3eHdBvPq6R","api_key":"96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e","ts_create":"1519480215","ts_update":"1519480215","recover_key":""},"error":null}
 ```
-for example we can send POST request without valid api_key:
+for example we can send POST request with valid api_key:
 ```
+Content-Type: multipart/form-data; boundary=---------------------------4542569731976795272962283586
+Content-Length: 753
+
+-----------------------------4542569731976795272962283586
+Content-Disposition: form-data; name="apikey"
+
+96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e
+-----------------------------4542569731976795272962283586
+Content-Disposition: form-data; name="id"
+
+3
+-----------------------------4542569731976795272962283586
+Content-Disposition: form-data; name="title"
+
+Some title321
+-----------------------------4542569731976795272962283586
+Content-Disposition: form-data; name="content"
+
+Some text3214
+-----------------------------4542569731976795272962283586
+Content-Disposition: form-data; name="filename"; filename=""
+Content-Type: application/octet-stream
+
+
+-----------------------------4542569731976795272962283586--
+
 
 ```
 and recieve some jsonify responce:
 ```
-
+{"context":"\/iface_v01\/recipe\/updateOwn","result":1,"error":null}
 ```
 
 # INSTALL:
