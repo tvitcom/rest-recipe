@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-$mem_start = memory_get_usage();
+//$mem_start = memory_get_usage();
 require 'vendor/autoload.php';
 
 require_once 'models/config.php';//Configuration file.
@@ -174,4 +174,4 @@ Flight::register('db', 'PDO', array('mysql:host=localhost;port=3306;dbname=recip
 );
 
 Flight::start();
-echo 'Memory:' . memory_get_usage() - $mem_start . '(bytes) get used.';
+//echo 'Memory:' . memory_get_usage() - $mem_start . '(bytes) get used.';

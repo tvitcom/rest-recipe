@@ -59,28 +59,30 @@ class Recipe
 
     public static function updateOwn($data)
     {
+        $own_id = isset($_SESSION['user_id'])?$_SESSION['user_id']:Author::selectByApikey($_POST['apikey'])['id'];
+        
         if (!count($data))
             return false;
         $query = "
             UPDATE recipe
-            SET (
+            SET
                 ts_create=:ts_create,
                 title=:title,
                 content=:content,
                 picture_uri=:picture_uri,
-                is_enable=:is_enable,
-            WHERE id = :id and aothor_id = :author_id
+                is_enable=:is_enable
+            WHERE id = :id and author_id = :author_id
             ";
         $query = Flight::db()->prepare($query);
         $query->bindValue(':id', $data['id'], PDO::PARAM_STR);
-        $query->bindValue(':author_id', $_SESSION['user_id'], PDO::PARAM_INT);
-        $query->bindValue(':ts_create', time(), PDO::PARAM_INT);
+        $query->bindValue(':author_id', $own_id, PDO::PARAM_INT);
+        $query->bindValue(':ts_create', (new \DateTime())->format('Y-m-d H:i:s'), PDO::PARAM_INT);
         $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
         $query->bindValue(':content', $data['content'], PDO::PARAM_STR);
-        $query->bindValue(':picture_uri', $data['picture_uri'], PDO::PARAM_STR);
+        $query->bindValue(':picture_uri', isset($data['picture_uri'])?$data['picture_uri']:'', PDO::PARAM_STR);
         $query->bindValue(':is_enable', 1, PDO::PARAM_INT);
         $query->execute();
-        return Flight::db()->lastInsertId();
+        return $query->rowCount();
     }
 
     public static function deleteOwn($id = 0)
@@ -90,7 +92,7 @@ class Recipe
         $query->bindValue(':author_id', $own_id, PDO::PARAM_INT);
         $query->bindValue(':id', $id, PDO::PARAM_INT);
         $result = $query->execute();
-        return $query->rowCount();;
+        return $query->rowCount();
     }
 
     public static function create($data)
