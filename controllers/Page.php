@@ -35,14 +35,22 @@ class Page {
     }
     
     public function read() {
-        Flight::render('read', [
-            'id'=>'',
-            'author_id'=>'',
-            'title' => ucfirst(explode('::',__METHOD__)[1]),
-            'content'=>'',
-            'date'=>'',
-            'name'=>'',
-            ]);
+        if (isset($_GET['id'])) {
+            $id = intval($_GET['id']);
+            //exit(var_dump(Recipe::selectById($id)));
+            $data = Recipe::selectById($id);
+            if ($data) {
+                Flight::render('read', [
+                    'data'=> $data[0],
+                    'sort'=>'',
+                    'title' => ucfirst(explode('::',__METHOD__)[1]),
+                ]);
+            } else {
+                Flight::redirect('/page/error404');
+            }
+        } else {
+            Flight::redirect('/page/listing');
+        }
     }
     
     public function add() {
