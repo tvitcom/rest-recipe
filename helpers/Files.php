@@ -39,7 +39,7 @@ class Files {
                 $newfilename = md5($_FILES["filename"]["name"] . Flight::get('hash_salt').time()).'.'.$suffix;
 
                 if (move_uploaded_file($_FILES['filename']['tmp_name'], Flight::get('uploaddir').DS.$newfilename)) {
-                    chmod(Flight::get('fs_uploaddir').DS.$newfilename, 0600);
+                    chmod(Flight::get('fs_uploaddir').DS.$newfilename, 0660);
                     return $newfilename;
                 }
             }

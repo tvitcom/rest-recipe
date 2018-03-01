@@ -80,19 +80,27 @@ class Page {
     }
     
     public function deleteOwn() {
-        if (!Auth::isLogged())
+        if (Auth::isLogged() && (isset($_SET) || isset($_POST))) {
+            $id = intval($_GET['id']);
+            //exit(var_dump(Recipe::selectById($id)));
+            if (isset($_GET['id'])) {
+                    $data = Recipe::selectById($id);
+                    if ($data) {
+                        Flight::render('delete', [
+                        'data'=> $data[0],
+                        'title' => ucfirst(explode('::',__METHOD__)[1]),
+                        ]); 
+                    } else {
+                        Flight::redirect('/page/error404');
+                    }
+               
+            } elseif (isset($_POST['affirmation']) && $_POST['affirmation']==='yes' && Recipe::deleteById($id)[0]) {
+                Flight::redirect('/page/listing');
+            } else { 
+                Flight::redirect('/page/listing');
+            }
+        } else {
             Flight::redirect('/page/login');
-                
-        $id = isset($_GET['id'])?intval($_GET['id']):0;
-        if (isset($_GET['id'])) {
-           Flight::render('delete', [
-            'data'=> Recipe::selectById($id)[0],
-            'title' => ucfirst(explode('::',__METHOD__)[1]),
-            ]); 
-        } elseif (isset($_POST['affirmation']) && $_POST['affirmation']==='yes' && Recipe::deleteById($id)[0]) {
-            Flight::redirect('/page/listing');
-        } else { 
-            Flight::redirect('/page/listing');
         }
     }
     
