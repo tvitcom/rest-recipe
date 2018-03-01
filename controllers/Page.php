@@ -17,11 +17,11 @@
  * limitations under the License
  */
 
-class Page extends Controller {
+class Page {
     
     public function __construct() {
-        self::loadfile('Recipe','models');
-        self::loadfile('Author','models');
+        Files::loadfile('Recipe','models');
+        Files::loadfile('Author','models');
         Flight::set('flight.views.path','views' . DS . lcfirst(__CLASS__));
     }
     
@@ -46,6 +46,9 @@ class Page extends Controller {
     }
     
     public function add() {
+        if (!Auth::isLogged())
+            Flight::redirect('/page/login');
+        
         Flight::render('add', [
             'id'=>'',
             'author_id'=>'',
@@ -53,20 +56,33 @@ class Page extends Controller {
             'content'=>'',
             'date'=>'',
             'name'=>'',
-            ]);
+        ]);
     }
     
     public function edit() {
-        self::loadfile('Recipe','models');
-        $id = intval($_GET['id']);
-        Flight::render('edit', [
-            'data'=> Recipe::selectById($id)[0],
-            'sort'=>'',
-            'title' => ucfirst(explode('::',__METHOD__)[1]),
-            ]);
+        if (Auth::isLogged() && (isset($_SET) || isset($_POST))) {
+            $id = intval($_GET['id']);
+            //exit(var_dump(Recipe::selectById($id)));
+            $data = Recipe::selectById($id);
+            if ($data) {
+                Flight::render('edit', [
+                    'data'=> $data[0],
+                    'sort'=>'',
+                    'title' => ucfirst(explode('::',__METHOD__)[1]),
+                ]);
+            } else {
+                Flight::redirect('/page/error404');
+            }
+            
+        } else {
+            Flight::redirect('/page/login');
+        }
     }
     
     public function deleteOwn() {
+        if (!Auth::isLogged())
+            Flight::redirect('/page/login');
+                
         $id = isset($_GET['id'])?intval($_GET['id']):0;
         if (isset($_GET['id'])) {
            Flight::render('delete', [
@@ -81,25 +97,40 @@ class Page extends Controller {
     }
     
     public function register() {
-                Flight::render('register', [
+        Flight::render('register', [
             'id'=>'',
             'author_id'=>'',
             'title' => ucfirst(explode('::',__METHOD__)[1]),
             'content'=>'',
             'date'=>'',
             'name'=>'',
-            ]);
+        ]);
     }
     
-    public function login() {
-        Flight::render('login', [
-            'id'=>'',
-            'author_id'=>'',
-            'title' => ucfirst(explode('::',__METHOD__)[1]),
-            'content'=>'',
-            'date'=>'',
-            'name'=>'',
+    public function login() {        
+
+        if (empty($_POST) && !Auth::isLogged()) {
+            Flight::render('login', [
+                'id'=>'',
+                'author_id'=>'',
+                'title' => ucfirst(explode('::',__METHOD__)[1]),
+                'content'=>'',
+                'date'=>'',
+                'name'=>'',
             ]);
+        } else {
+            $user = Author::selectByEmail(Filtr::txt($_POST['email']));
+            if (is_array($user) && (Auth::hash(Filtr::pwd($_POST['password'])) === $user['pass_hash'])) {
+                Auth::setLogin($user);
+                Flight::redirect('/page/listing');
+            } else {
+                Flight::halt(401,'Error 401 Not authorized.');
+                if (WEB_DEBUG)
+                    exit('Filtr::txt($_POST[\'email\']:'.Filtr::txt($_POST['email']).' $user[\'pass_hash\']:'.$user['pass_hash'].' Filtr::pwd($_POST[\'password\']:'.Filtr::pwd($_POST['password']));
+                else    
+                    exit();
+            }
+        }
     }
     
         
@@ -111,6 +142,6 @@ class Page extends Controller {
             'content'=>'',
             'date'=>'',
             'name'=>'',
-            ]);
+        ]);
     }
 }

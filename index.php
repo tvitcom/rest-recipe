@@ -21,9 +21,9 @@ require 'vendor/autoload.php';
 
 require_once 'models/config.php';//Configuration file.
 require_once 'helpers/Auth.php'; //some helpers.
+require_once 'helpers/Files.php'; //...helpers...
 require_once 'helpers/Filtr.php';//yet.
 require_once 'models/Author.php';//because is as the user class and be always accessible.
-require_once 'controllers/Controller.php';//connnect parent controller.
 
 if ($_SERVER['REMOTE_ADDR']===DEV_ADDR) {
     defined('WEB_DEBUG') or define('WEB_DEBUG', 'true');// Define directory separator sign.
@@ -134,27 +134,27 @@ Flight::route('POST /iface_v01(/@entity(/@method))', function($entity, $method){
 });
 
 // Work with frontends pages and forms.
-Flight::route('GET /@controller(/@action)', function($controller, $action){
+Flight::route('GET|POST /@controller(/@action)', function($controller, $action){
 
     // load only file of entity class;
     $classname = ucfirst($controller);
     $controller_file = 'controllers' . DS . $classname . '.php';
-    
-    
-    //Authentication and authorisation if:
-    if (in_array($action, Flight::get('actions_to_login')) && !Auth::isLogged())
-        Flight::redirect('/page/login');
-            
-    if (file_exists($controller_file)) {
-        
-    // Register your class
-    require_once $controller_file;
-    Flight::register($controller, $classname);
-    $action = ($action !='')?$action:'listing';
-    Flight::{$controller}()->{$action}();
 
-    } else { 
-        Flight::redirect('/page/error404');
+    if (file_exists($controller_file)) {
+        // Register your class
+        require_once $controller_file;
+        Flight::register($controller, $classname);
+
+    // Get an instance of your class
+        $$classname = Flight::{$controller}();
+        if (method_exists($$classname, $action)) {
+            $action = ($action !='')?$action:'listing';
+            Flight::{$controller}()->{$action}();
+        } else { 
+            Flight::redirect('/page/error404');
+        }
+    } else {
+        Flight::halt(404, '<h1><font color="red">Error 404. Page not found!</font></h1>');
     }
 });
 
@@ -163,7 +163,7 @@ Flight::route('/', function(){
 });
 
 Flight::route('/*', function(){
-    Flight::halt(404, '<h1><font color="red">Error 404. Page not found!</font></h1>');
+    Flight::halt(404, '<h1><font color="red">Error 404. Page not found123!</font></h1>');
 });
 
 //Flight::register('db', 'PDO', array('pgsql:host=localhost;port=5432;dbname=recipe','recipe','pass_to_recipe'),

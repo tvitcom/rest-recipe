@@ -111,21 +111,6 @@ class Author
         };
     }
     
-    public static function login($post) {
-
-        if (empty($_POST) && !Auth::isLogged()) {
-                Flight::redirect('/page/login');
-        }
-        $user = self::selectByEmail(Filtr::txt($_POST['email']));
-        if (is_array($user) && (Auth::hash(Filtr::pwd($_POST['password'])) === $user['pass_hash'])) {
-            Auth::setLogin($user);
-            Flight::redirect('/page/list');
-        } else {
-            Flight::halt(401,'Error 401 Not authorized.');
-            exit('Filtr::txt($_POST[\'email\']:'.Filtr::txt($_POST['email']).' $user[\'pass_hash\']:'.$user['pass_hash'].' Filtr::pwd($_POST[\'password\']:'.Filtr::pwd($_POST['password']));
-        }
-    }
-    
     public static function logout($params) {
         Auth::setLogout();
         Flight::redirect('/page/login');
