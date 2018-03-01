@@ -27,7 +27,7 @@ class Auth
 {
     public static function isLogged()
     {
-        if (null !==@$_SESSION['user_id'])
+        if (isset($_SESSION) && isset($_SESSION['user_id']))
             return $_SESSION['user_id'];
         else 
             return false;

@@ -48,4 +48,15 @@ class Files {
         Flight::set('error','File not uploaded.');
         return false;
     }
+    
+    public static function loadfile($filename = '', $dir = 'models') {
+        $filepath = Flight::get('webdir') . DS . $dir . DS . $filename . '.php';
+        if (!file_exists($filepath)){
+            Flight::halt(404, '<h1 color="red">Error 404. Page not found!</h1>');
+            exit();
+        }
+
+        require_once $filepath;
+        return true;
+    }
 }

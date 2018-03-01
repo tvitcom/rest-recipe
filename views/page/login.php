@@ -23,26 +23,6 @@
  * Template Copyright 2018 by https://github.com/verekia/.
  */
 ?>
-<!doctype html>
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-	<title></title>
-	<meta name="description" content="">
-	<meta name="author" content="">
-
-	<meta name="viewport" content="width=device-width,initial-scale=1">
-
-	<link rel="stylesheet" href="/static/css/style.css">
-
-	<script src="/static/js/libs/modernizr-2.0.6.min.js"></script>
-</head>
-<body>
 
 <?php require 'main_header.php'?>
 	<div id="main-container">
@@ -56,16 +36,14 @@
 				<section>
 					<h2>Sign here:</h2>
 					<p>
-                                        <form method="POST" accept-charset="utf-8" action="/iface_v01/author/login" target="_self">
-                                     
-                                            Email:<br>
-                                            <input type="email" name="email" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Z@-\.]+$"><br>
-                                            Password:<br>
-                                              <input type="password" name="password" autocomplete="on"><br><br>
-                                              <input type="submit" value="Submit">
-                        
-                                        </form> 
-                                        </p>
+                    <form method="POST" accept-charset="utf-8" action="/page/login" target="_self">
+                        Email:<br>
+                        <input type="email" name="email" autofocus="on" autocomplete="on" pattern="^[0-9a-zA-Z@-\.]+$"><br>
+                        Password:<br>
+                          <input type="password" name="password" autocomplete="on"><br><br>
+                          <input type="submit" value="Submit">
+                    </form> 
+                    </p>
 				</section>
 				
 				<footer>

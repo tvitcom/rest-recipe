@@ -60,7 +60,6 @@ class Recipe
     public static function updateOwn($data)
     {
         $own_id = isset($_SESSION['user_id'])?$_SESSION['user_id']:Author::selectByApikey($_POST['apikey'])['id'];
-        
         if (!count($data))
             return false;
         $query = "
@@ -79,7 +78,7 @@ class Recipe
         $query->bindValue(':ts_create', (new \DateTime())->format('Y-m-d H:i:s'), PDO::PARAM_INT);
         $query->bindValue(':title', $data['title'], PDO::PARAM_STR);
         $query->bindValue(':content', $data['content'], PDO::PARAM_STR);
-        $query->bindValue(':picture_uri', isset($data['picture_uri'])?$data['picture_uri']:'', PDO::PARAM_STR);
+        $query->bindValue(':picture_uri', Files::uploadHandler(), PDO::PARAM_STR);
         $query->bindValue(':is_enable', 1, PDO::PARAM_INT);
         $query->execute();
         return $query->rowCount();
