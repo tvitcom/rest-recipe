@@ -71,6 +71,12 @@ curl -sS https://getcomposer.org/installer | /usr/bin/php;
 ```
 and you will create local database:"recipe" and approciate user:"recipe" with passwod:"pass_to_recipe"
 and then load recipe.sql to database.
+Then create dir in webroot server location:
+```
+mkdir -m 0750 filestorage    
+```
+And you'll be insert appropriate settings to models/config.php file.
+If you finish and see index page with aside menu, you may register few tests users, create examples recipes and click some test link in aside menu. 
 
 ## Routes using inteface:
 
