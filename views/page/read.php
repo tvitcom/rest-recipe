@@ -11,19 +11,17 @@
 			
 			<article>
 				<header>
-					<h1>Page read(Coming soon)</h1>
-                    <p>We apologise, this page coming sool but you can see other links done.</p>
+					<h1>Page read recipe:</h1>
+                    <p>Welcome dear friend!</p>
 				</header>
 				<section>
-					<h2>Related links:</h2>
-                    <p>
-                    <ul>
-                        <li><a href="/page/listing">List recipes</a></li>
-                        <li><a href="/page/add">Add recipe</a></li>
-                        <li><a href="/page/register">Register</a></li>
-                        <li><a href="/page/login">Login</a></li>
-                    </ul>
-                    </p>
+					<h2><?=$data['title']?></h2>
+					<p><?=$data['content']?></p>
+                                        <p><?=$data['ts_create']?> . <?php 
+                                        echo (isset($_SESSION['user_id']) && $_SESSION['user_id']==$data['author_id'])
+                                        ?'<a href=/page/edit?id='.$data['id'].'>Edit</a>'
+                                        :'';
+                                        ?>
 				</section>
 				<!--section>
 					<h2>article section h2</h2>
